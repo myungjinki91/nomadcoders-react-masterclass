@@ -183,3 +183,57 @@ function App() {
   );
 }
 ```
+
+## 2.3 'As' and Attrs
+
+만약 Button과 같은 Style이지만, HTML Element를 <button>이 아닌 <a>로 하고 싶다면?
+
+as를 사용하면 됩니다.
+
+```jsx
+const Father = styled.div`
+  display: flex;
+`;
+
+const Btn = styled.button`
+  color: white;
+  background-color: tomato;
+  border: 0;
+  border-radius: 15px;
+`;
+
+function App() {
+  return (
+    <Father as="header">
+      <Btn>Login</Btn>
+      <Btn as="a" href="/">
+        Login
+      </Btn>
+    </Father>
+  );
+}
+```
+
+또한 Component에서 HTML Attribute를 설정할 수 있습니다.
+
+```jsx
+const Father = styled.div`
+  display: flex;
+`;
+
+const Input = styled.input.attrs({ required: true, minLength: 10 })`
+  background-color: tomato;
+`;
+
+function App() {
+  return (
+    <Father as="header">
+      <Input />
+      <Input />
+      <Input />
+      <Input />
+      <Input />
+    </Father>
+  );
+}
+```
