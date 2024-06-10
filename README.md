@@ -31,3 +31,98 @@ styled components는 아주 획기적인 발상입니다.
 3. CSS Module
 
 CSS Module이 가장 좋은 방법이었지만, className을 계속 적어줘야하고, class이름을 짓는 것이 꽤나 까다로웠습니다.
+
+## 2.1 Our First Styled Component
+
+설치부터 해봅시다.
+
+```bash
+npm i styled-components
+```
+
+style attribute를 적용한 코드를 봅시다.
+
+```
+function App() {
+  return (
+    <div style={{ display: "flex" }}>
+      <div style={{ backgroundColor: "teal", width: 100, height: 100 }}></div>
+      <div style={{ backgroundColor: "tomato", width: 100, height: 100 }}></div>
+    </div>
+  );
+}
+```
+
+위 코드의 단점은 2가지 입니다.
+
+1. div의 남발
+2. CSS를 읽어야 box인지 확인 가능함
+3. 코드가 지저분함
+
+styled components를 사용해봅시다.
+
+```jsx
+import styled from "styled-components";
+
+const Father = styled.div`
+  display: flex;
+`;
+
+const BoxOne = styled.div`
+  background-color: teal;
+  width: 100px;
+  height: 100px;
+`;
+
+const BoxTwo = styled.div`
+  background-color: tomato;
+  width: 100px;
+  height: 100px;
+`;
+
+function App() {
+  return (
+    <Father>
+      <BoxOne />
+      <BoxTwo />
+    </Father>
+  );
+}
+```
+
+더이상 div를 남발하지도 않고, 각각의 Component가 어떤 의미인지 전달 가능합니다. 그리고 코드가 깔끔해졌습니다. 그리고 구현부분과 Style부분이 분리가 되었습니다.
+
+Text도 추가해봅시다.
+
+```jsx
+const Father = styled.div`
+  display: flex;
+`;
+
+const BoxOne = styled.div`
+  background-color: teal;
+  width: 100px;
+  height: 100px;
+`;
+
+const BoxTwo = styled.div`
+  background-color: tomato;
+  width: 100px;
+  height: 100px;
+`;
+
+const Text = styled.span`
+  color: white;
+`;
+
+function App() {
+  return (
+    <Father>
+      <BoxOne>
+        <Text>Text</Text>
+      </BoxOne>
+      <BoxTwo />
+    </Father>
+  );
+}
+```
