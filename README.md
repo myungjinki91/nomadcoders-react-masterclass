@@ -126,3 +126,60 @@ function App() {
   );
 }
 ```
+
+## 2.2 Adapting and Extending
+
+BoxOne, BoxTwo가 중복이여서 하나로 해결하고 싶습니다.
+
+```jsx
+const Father = styled.div`
+  display: flex;
+`;
+
+const Box = styled.div`
+  background-color: ${(props) => props.bgColor};
+  width: 100px;
+  height: 100px;
+`;
+
+function App() {
+  return (
+    <Father>
+      <Box bgColor="teal" />
+      <Box bgColor="tomato" />
+    </Father>
+  );
+}
+```
+
+JSX와 마찬가지로 Props를 전달할 수 있습니다.
+
+상속도 가능합니다.
+
+```jsx
+const Father = styled.div`
+  display: flex;
+`;
+
+const Box = styled.div`
+  background-color: ${(props) => props.bgColor};
+  width: 100px;
+  height: 100px;
+`;
+
+const Circle = styled(Box)`
+  background-color: ${(props) => props.bgColor};
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+`;
+
+function App() {
+  return (
+    <Father>
+      <Box bgColor="teal" />
+      <Circle bgColor="tomato" />
+    </Father>
+  );
+}
+```
