@@ -492,3 +492,69 @@ npm i --save typescript @types/node @types/react @types/react-dom @types/jest
 ```
 
 Styled Components는 JavaScript로 만들어졌기 때문에 TypeScript가 알 길이 없습니다. DefinitelyTyped에 사람들이 .d.ts정보를 모아놨습니다.
+
+## 3.2 Typing the Props
+
+Component를 Type한다는 것은 Component에게 Type을 준다는 뜻입니다. 즉 TypeScript에게 뭔가 설명해 준다는 것입니다.
+
+PropTypes는 코드를 실행한 후 Console에 경고를 알려줍니다.
+
+```tsx
+import Circle from "./Circle";
+
+function App() {
+  return (
+    <div>
+      <Circle bgColor="teal" />
+      <Circle bgColor="tomato" />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+```tsx
+import styled from "styled-components";
+
+interface ContainerProps {
+  bgColor: string;
+}
+
+const Container = styled.div<ContainerProps>`
+  width: 100px;
+  height: 100px;
+  background-color: ${(props) => props.bgColor};
+  border-radius: 100px;
+`;
+
+interface CircleProps {
+  bgColor: string;
+}
+
+function Circle({ bgColor }: CircleProps) {
+  return <Container bgColor={bgColor} />;
+}
+
+export default Circle;
+
+```
+
+대부분의 경우 React component의 props와 Styled components의 props가 다릅니다.
+
+다른 예제입니다.
+
+```tsx
+interface PlayerShape {
+  name: string;
+  age: string;
+}
+
+const sayHello = (playerObj: PlayerShape) =>
+  `Hello ${playerObj.name}, you are ${playerObj.age} years old`;
+
+sayHello({ name: "nico", age: "12" });
+sayHello({ name: "hi", age: "12" });
+
+```
