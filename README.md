@@ -470,3 +470,15 @@ export default App;
 ```
 
 주의할 점은 darkTheme, lightTheme등 Theme안의 property는 반드시 같아야 합니다.
+
+# 3 TYPESCRIPT
+
+## 3.0 Introduction
+
+TypeScript는 JavaScript에서 Type을 추가한 것입니다. 또한 Strongly-Typed Language입니다.
+
+```tsx
+	const plus = (a: number, b: number) => a + b;
+```
+
+TypeScript는 배포 전에 JavaScript로 Compile됩니다.
