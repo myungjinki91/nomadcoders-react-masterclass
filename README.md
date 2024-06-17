@@ -482,3 +482,13 @@ TypeScript는 JavaScript에서 Type을 추가한 것입니다. 또한 Strongly-T
 ```
 
 TypeScript는 배포 전에 JavaScript로 Compile됩니다.
+
+## 3.1 DefinitelyTyped
+
+기존 파일에 TypeScript를 적용하려면 아래 파일들을 설치하면 됩니다.
+
+```bash
+npm i --save typescript @types/node @types/react @types/react-dom @types/jest
+```
+
+Styled Components는 JavaScript로 만들어졌기 때문에 TypeScript가 알 길이 없습니다. DefinitelyTyped에 사람들이 .d.ts정보를 모아놨습니다.
