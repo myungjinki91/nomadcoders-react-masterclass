@@ -42,7 +42,7 @@ npm i styled-components
 
 style attribute를 적용한 코드를 봅시다.
 
-```
+```jsx
 function App() {
   return (
     <div style={{ display: "flex" }}>
@@ -186,7 +186,7 @@ function App() {
 
 ## 2.3 'As' and Attrs
 
-만약 Button과 같은 Style이지만, HTML Element를 <button>이 아닌 <a>로 하고 싶다면?
+만약 Button과 같은 Style이지만, HTML Element를 `<button>`이 아닌 `<a>`로 하고 싶다면?
 
 as를 사용하면 됩니다.
 
@@ -343,7 +343,7 @@ export default App;
 
 ## 2.5 Pseudo Selectors part Two
 
-<span>이 바뀐다면…?
+`<span>`이 바뀐다면…?
 
 ```jsx
 import styled, { keyframes } from "styled-components";
@@ -401,3 +401,7 @@ function App() {
 export default App;
 
 ```
+
+## 2.6 Super Recap
+
+지금까지 배운 것을 몰라도 걱정하지 마세요. 어짜피 엄청나게 복습할 겁니다.
