@@ -627,3 +627,26 @@ undefined ?? "hello" // "hello"
 
 // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
 ```
+
+## 3.4 State
+
+```tsx
+function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
+  const [counter, setCounter] = useState<number>(0);
+  return (
+    <Container bgColor={bgColor} borderColor={borderColor ?? "white"}>
+      {text}
+    </Container>
+  );
+}
+```
+
+### sugar’s tip
+
+`useState < number > ( )`
+
+state의 type을 지정하려면 Generics안에 타입을 지정
+
+일반적으로는 초기값을 지정하면 타입스크립트가 자동으로 타입을 유추하기 때문에 굳이 지정해주지 않아도 되지만 상태가 undefined또는 null이 될 수도 있거나 객체 또는 배열일 때는 지정해주는 것이 좋다.
+
+ex) `const [ value, setValue ] = useState< Value | null >(null);`
