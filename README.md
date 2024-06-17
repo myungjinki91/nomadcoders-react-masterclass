@@ -558,3 +558,72 @@ sayHello({ name: "nico", age: "12" });
 sayHello({ name: "hi", age: "12" });
 
 ```
+
+## 3.3 Optional Props
+
+```tsx
+import Circle from "./Circle";
+
+function App() {
+  return (
+    <div>
+      <Circle borderColor="yellow" bgColor="teal" />
+      <Circle text="im here" bgColor="tomato" />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+?와 default value로 Optional props를 만들 수 있습니다.
+
+```tsx
+import styled from "styled-components";
+
+interface ContainerProps {
+  bgColor: string;
+  borderColor?: string;
+  text?: string;
+}
+
+const Container = styled.div<ContainerProps>`
+  width: 100px;
+  height: 100px;
+  background-color: ${(props) => props.bgColor};
+  border-radius: 100px;
+  border: 1px solid ${(props) => props.borderColor};
+`;
+
+interface CircleProps {
+  bgColor: string;
+  borderColor?: string;
+  text?: string;
+}
+
+function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
+  return (
+    <Container bgColor={bgColor} borderColor={borderColor ?? "white"}>
+      {text}
+    </Container>
+  );
+}
+
+export default Circle;
+
+```
+
+### sugar’s tip
+
+- ?? (Null 병합 연산자 (Nullish coalescing operator))
+
+??앞에 값이 null이거나 undefined이면 오른쪽 값을, 그렇지 않으면 왼쪽 값을 반환하는 논리연산자
+
+```tsx
+null ?? "hello" // "hello"
+undefined ?? "hello" // "hello"
+"hi" ?? "hello" // "hi"
+
+// https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
+```
