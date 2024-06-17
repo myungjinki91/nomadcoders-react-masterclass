@@ -1,23 +1,22 @@
 import styled, { keyframes } from "styled-components";
 
+const Title = styled.h1`
+  color: ${(props) => props.theme.textColor};
+`;
+
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;
   width: 100vw;
   justify-content: center;
   align-items: center;
-  h1 {
-    color: tomato;
-    &:hover {
-      color: teal;
-    }
-  }
+  background-color: ${(props) => props.theme.backgroundColor};
 `;
 
 function App() {
   return (
     <Wrapper>
-      <h1>Hello</h1>
+      <Title>Hello, World!</Title>
     </Wrapper>
   );
 }

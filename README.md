@@ -405,3 +405,68 @@ export default App;
 ## 2.6 Super Recap
 
 지금까지 배운 것을 몰라도 걱정하지 마세요. 어짜피 엄청나게 복습할 겁니다.
+
+## 2.7 Themes
+
+다크모드를 구현한다면 50%는 Theme, 50%는 Local Estate Management입니다.
+
+theme이란 모든 색상을 가지고 있는 object입니다.
+
+Theme을 사용하기 위해서 ThemeProvider를 사용해야 합니다.
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ThemeProvider } from "styled-components";
+import App from "./App";
+
+const darkTheme = {
+  textColor: "whitesmoke",
+  backgroundColor: "#111",
+};
+
+const lightTheme = {
+  textColor: "#111",
+  backgroundColor: "whitesmoke",
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <ThemeProvider theme={darkTheme}>
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
+);
+
+```
+
+```jsx
+import styled, { keyframes } from "styled-components";
+
+const Title = styled.h1`
+  color: ${(props) => props.theme.textColor};
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  background-color: ${(props) => props.theme.backgroundColor};
+`;
+
+function App() {
+  return (
+    <Wrapper>
+      <Title>Hello, World!</Title>
+    </Wrapper>
+  );
+}
+
+export default App;
+
+```
+
+주의할 점은 darkTheme, lightTheme등 Theme안의 property는 반드시 같아야 합니다.
