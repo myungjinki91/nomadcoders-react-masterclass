@@ -772,3 +772,9 @@ function App() {
 export default App;
 
 ```
+
+## 3.7 Recap
+
+모든 React Event에 대해서 알고 싶다면 Synthetic Event를 찾아보세요.
+
+DefinitelyTypes에서 type을 찾아보지 마세요. 어짜피 GitHub는 1,000개 밖에 안보여줍니다.
