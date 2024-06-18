@@ -790,3 +790,170 @@ npm i react-router-dom@5.4.3
 ```
 
 강의를 끝까지 들은 후 다시 돌아와주세요.
+
+# 5 CRYPTO TRACKER
+
+## 5.0 Setup
+
+이번 프로젝트에서는 아주 간단한 코인 트래커를 만들겁니다. 아래 링크는 자주 사용하는 코인 API입니다.
+
+https://api.coinpaprika.com
+
+아래 내용을 배워볼 겁니다.
+
+- fetching
+- React Query
+
+React Query가 왜 만들어졌는지도 배울겁니다. 항상 왜 만들어졌는지 아는 것이 중요합니다.
+
+설치부터 해봅시다. 필요한 프로그램 버전은 아래와 같습니다.
+
+- node@20.14.0
+- npm@10.7.0
+- react@18.3.1
+- typescript@4.9.5
+- styled-component@6.1.11
+- react-router-dom@5.3.4
+- @types/react-router-dom
+- react-query@3.39.3
+
+설치 명령업니다.
+
+```bash
+npx create-react-app crypto-tracker --template typescript
+npm i react-router-dom@5.3
+npm i -D @types/react-router-dom
+npm i react-query
+npm i -D styled-components
+```
+
+Nested Router에 대해서도 배울 겁니다. 전체 코드 입니다.
+
+### index.tsx
+
+저번에 배운 Styled Components의 ThemeProvider도 사용할겁니다. 다만 Theme은 한개입니다.
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
+  
+);
+
+```
+
+### styled.d.ts
+
+```tsx
+import "styled-components";
+
+declare module "styled-components" {
+  export interface DefaultTheme {
+    textColor: string;
+    bgColor: string;
+  }
+}
+
+```
+
+### theme.ts
+
+```tsx
+import { DefaultTheme } from "styled-components";
+
+export const theme: DefaultTheme = {
+  bgColor: "white",
+  textColor: "black",
+};
+
+```
+
+### App.tsx
+
+React Router도 적용할겁니다.
+
+```tsx
+import Router from "./Router";
+
+function App() {
+  return <Router />;
+}
+
+export default App;
+
+```
+
+### Route.tsx
+
+BrowserRoute의 basename을 정해주어야 GitHub Page Production환경에서 잘 동작합니다.
+
+```tsx
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Coins from "./routers/Coins";
+import Coin from "./routers/Coin";
+
+function Router() {
+  return (
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <Switch>
+        <Route path="/:coinId">
+          <Coin />
+        </Route>
+        <Route path="/">
+          <Coins />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
+}
+
+export default Router;
+
+```
+
+### routers/Coins.tsx
+
+```tsx
+function Coins() {
+  return (
+    <div>
+      <h1>Coins</h1>
+    </div>
+  );
+}
+
+export default Coins;
+
+```
+
+### routers/Coin.tsx
+
+useParams와 interface에 익숙해집시다.
+
+```tsx
+import { useParams } from "react-router-dom";
+
+interface RouteParams {
+  coinId: string;
+}
+
+function Coin() {
+  const { coinId } = useParams<RouteParams>();
+  return <h1>Coin: {coinId}</h1>;
+}
+
+export default Coin;
+
+```
