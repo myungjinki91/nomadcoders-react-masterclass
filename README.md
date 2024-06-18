@@ -690,3 +690,85 @@ function App() {
 export default App;
 
 ```
+
+## 3.6 Themes
+
+Styled Component의 Default Theme을 수정하고싶다면, styled.d.ts 파일을 만들면 됩니다.
+
+아래 공식 링크에서 확인할 수 있습니다.
+
+https://styled-components.com/docs/api#typescript
+
+```tsx
+import "styled-components";
+
+declare module "styled-components" {
+  export interface DefaultTheme {
+    textColor: string;
+    bgColor: string;
+  }
+}
+
+```
+
+그러면 이제 DefaultTheme에 위 Type이 추가된 것을 확인할 수 있습니다.
+
+```tsx
+import { DefaultTheme } from "styled-components";
+
+export const ligthTheme: DefaultTheme = {
+  bgColor: "white",
+  textColor: "black",
+};
+
+export const darkTheme: DefaultTheme = {
+  bgColor: "black",
+  textColor: "white",
+};
+
+```
+
+그럼 이제 새로 Theme을 적용해볼까요?
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, ligthTheme } from "./theme";
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <ThemeProvider theme={darkTheme}>
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
+);
+
+```
+
+```tsx
+import { useState } from "react";
+import styled from "styled-components";
+
+const Container = styled.div`
+  background-color: ${(props) => props.theme.bgColor};
+`;
+const H1 = styled.h1`
+  color: ${(props) => props.theme.textColor};
+`;
+
+function App() {
+  return (
+    <Container>
+      <H1>Hi</H1>
+    </Container>
+  );
+}
+
+export default App;
+
+```
