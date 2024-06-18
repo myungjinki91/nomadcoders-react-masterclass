@@ -778,3 +778,15 @@ export default App;
 모든 React Event에 대해서 알고 싶다면 Synthetic Event를 찾아보세요.
 
 DefinitelyTypes에서 type을 찾아보지 마세요. 어짜피 GitHub는 1,000개 밖에 안보여줍니다.
+
+# 4. REACT ROUTER V6
+
+## 4.0 Update Introduction
+
+앞으로의 강의는 React Router v5로 진행됩니다. 그러나 v6이 되면서 breaking change가 되었습니다.
+
+```bash
+npm i react-router-dom@5.4.3
+```
+
+강의를 끝까지 들은 후 다시 돌아와주세요.
