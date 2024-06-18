@@ -53,17 +53,46 @@ interface CoinInterface {
   type: string;
 }
 
+const CACHE_KEY = "coins_data";
+const CACHE_EXPIRY_KEY = "coins_data_expiry";
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+
 function Coins() {
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const data: Array<CoinInterface> = await response.json();
-      setCoins(data.slice(0, 100));
-      setLoading(false);
-    })();
-  });
+    const loadCoins = async () => {
+      try {
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        const cachedExpiry = localStorage.getItem(CACHE_EXPIRY_KEY);
+
+        if (cachedData && cachedExpiry && Date.now() < Number(cachedExpiry)) {
+          // Use cached data if available and not expired
+          setCoins(JSON.parse(cachedData));
+          setLoading(false);
+          console.log("Using cached data");
+        } else {
+          // Fetch new data from the API
+          const response = await fetch("https://api.coinpaprika.com/v1/coins");
+          const data: Array<CoinInterface> = await response.json();
+          setCoins(data.slice(0, 100));
+          setLoading(false);
+
+          // Cache the new data and set expiry
+          localStorage.setItem(CACHE_KEY, JSON.stringify(data.slice(0, 100)));
+          localStorage.setItem(
+            CACHE_EXPIRY_KEY,
+            (Date.now() + CACHE_DURATION).toString()
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching coins data:", error);
+        setLoading(false);
+      }
+    };
+
+    loadCoins();
+  }, []);
   return (
     <Container>
       <Header>
