@@ -274,7 +274,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ```jsx
@@ -291,7 +290,6 @@ const rotationAnimation = keyframes`
 ```
 
 ```jsx
-
 const rotationAnimation = keyframes`
   0% {
     transform: rotate(0deg);
@@ -338,7 +336,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ## 2.5 Pseudo Selectors part Two
@@ -399,7 +396,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ## 2.6 Super Recap
@@ -438,7 +434,6 @@ root.render(
     </ThemeProvider>
   </React.StrictMode>
 );
-
 ```
 
 ```jsx
@@ -466,7 +461,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 주의할 점은 darkTheme, lightTheme등 Theme안의 property는 반드시 같아야 합니다.
@@ -478,7 +472,7 @@ export default App;
 TypeScript는 JavaScript에서 Type을 추가한 것입니다. 또한 Strongly-Typed Language입니다.
 
 ```tsx
-	const plus = (a: number, b: number) => a + b;
+const plus = (a: number, b: number) => a + b;
 ```
 
 TypeScript는 배포 전에 JavaScript로 Compile됩니다.
@@ -512,7 +506,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ```tsx
@@ -538,7 +531,6 @@ function Circle({ bgColor }: CircleProps) {
 }
 
 export default Circle;
-
 ```
 
 대부분의 경우 React component의 props와 Styled components의 props가 다릅니다.
@@ -556,7 +548,6 @@ const sayHello = (playerObj: PlayerShape) =>
 
 sayHello({ name: "nico", age: "12" });
 sayHello({ name: "hi", age: "12" });
-
 ```
 
 ## 3.3 Optional Props
@@ -574,7 +565,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ?와 default value로 Optional props를 만들 수 있습니다.
@@ -611,7 +601,6 @@ function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
 }
 
 export default Circle;
-
 ```
 
 ### sugar’s tip
@@ -621,9 +610,9 @@ export default Circle;
 ??앞에 값이 null이거나 undefined이면 오른쪽 값을, 그렇지 않으면 왼쪽 값을 반환하는 논리연산자
 
 ```tsx
-null ?? "hello" // "hello"
-undefined ?? "hello" // "hello"
-"hi" ?? "hello" // "hi"
+null ?? "hello"; // "hello"
+undefined ?? "hello"; // "hello"
+"hi" ?? "hello"; // "hi"
 
 // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
 ```
@@ -688,7 +677,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ## 3.6 Themes
@@ -708,7 +696,6 @@ declare module "styled-components" {
     bgColor: string;
   }
 }
-
 ```
 
 그러면 이제 DefaultTheme에 위 Type이 추가된 것을 확인할 수 있습니다.
@@ -725,7 +712,6 @@ export const darkTheme: DefaultTheme = {
   bgColor: "black",
   textColor: "white",
 };
-
 ```
 
 그럼 이제 새로 Theme을 적용해볼까요?
@@ -747,7 +733,6 @@ root.render(
     </ThemeProvider>
   </React.StrictMode>
 );
-
 ```
 
 ```tsx
@@ -770,7 +755,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ## 3.7 Recap
@@ -849,9 +833,7 @@ root.render(
       <App />
     </ThemeProvider>
   </React.StrictMode>
-  
 );
-
 ```
 
 ### styled.d.ts
@@ -865,7 +847,6 @@ declare module "styled-components" {
     bgColor: string;
   }
 }
-
 ```
 
 ### theme.ts
@@ -877,7 +858,6 @@ export const theme: DefaultTheme = {
   bgColor: "white",
   textColor: "black",
 };
-
 ```
 
 ### App.tsx
@@ -892,7 +872,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ### Route.tsx
@@ -920,7 +899,6 @@ function Router() {
 }
 
 export default Router;
-
 ```
 
 ### routers/Coins.tsx
@@ -935,7 +913,6 @@ function Coins() {
 }
 
 export default Coins;
-
 ```
 
 ### routers/Coin.tsx
@@ -955,5 +932,97 @@ function Coin() {
 }
 
 export default Coin;
+```
 
+## 5.1 Styles
+
+Browser에서 제공하는 기본 CSS를 초기화 하고 싶다면 아래 링크를 사용합니다.
+
+- https://meyerweb.com/eric/tools/css/reset/index.html
+
+심지어 Package로도 제공합니다.
+
+- https://github.com/zacanger/styled-reset/tree/master
+
+그런데 이 CSS를 어디에 적용해야 할까요? Styled Componenets에서는 Create Global Style을 제공합니다.
+
+https://styled-components.com/docs/api#createglobalstyle
+
+React의 Fragment도 사용해야 합니다.
+
+```tsx
+import { createGlobalStyle } from "styled-components";
+import Router from "./Router";
+
+const GlobalStyle = createGlobalStyle`
+`;
+
+function App() {
+  return (
+    <>
+      <GlobalStyle />
+      <Router />
+    </>
+  );
+}
+
+export default App;
+```
+
+Reset CSS를 GlobalStyle에 넣어봅시다.
+
+그런데, Prettier가 동작하지 않는다면? 아래 링크를 참고해보세요.
+
+https://github.com/styled-components/vscode-styled-components/issues/175
+
+다음은 Font입니다.
+
+Google Fonts https://fonts.google.com
+
+Source Sans Pro 폰트
+
+### App.tsx
+
+```css
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Source Sans Pro", sans-serif;
+}
+a {
+  text-decoration: none;
+}
+```
+
+CSS 색깔도 모아둔 사이트가 있습니다.
+
+https://flatuicolors.com/palette/gb
+
+### App.tsx
+
+```css
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
+  accent-color: ${(props) => props.theme.accentColor};
+}
+a {
+  text-decoration: none;
+}
+```
+
+Console Error가 신경쓰이고, React Helmet은 쓰기 싫다면 public/index.html의 `<head>`안에 추가하면 해결됩니다.
+
+```html
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap"
+/>
 ```
