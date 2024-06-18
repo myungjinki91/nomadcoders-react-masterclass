@@ -145,6 +145,7 @@ const GlobalStyle = createGlobalStyle`${css`
   }
   a {
     text-decoration: none;
+    color: inherit;
   }
 `}
 `;

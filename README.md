@@ -1026,3 +1026,102 @@ Console Error가 신경쓰이고, React Helmet은 쓰기 싫다면 public/index.
   href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap"
 />
 ```
+
+## 5.2 Home part One
+
+API를 사용해 Coin정보를 가져옵시다.
+
+https://api.coinpaprika.com/v1/coins
+
+React Router를 사용하니 `<a>`대신 `<Link>`를 사용합시다. 추후 <Link>는 모두 <a>로 변경되기 때문에 Link에 CSS를 적용하고 싶다면, a element에 적용하면 됩니다.
+
+Hover도 적용해봅시다.
+
+```tsx
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const Container = styled.div`
+  padding: 0px 10px;
+`;
+
+const Header = styled.header`
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CoinsList = styled.ul``;
+
+const Coin = styled.li`
+  background-color: white;
+  color: ${(props) => props.theme.bgColor};
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  a {
+    transition: color 0.2s ease-in;
+  }
+  &:hover {
+    a {
+      color: ${(props) => props.theme.accentColor};
+    }
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 48px;
+  color: ${(props) => props.theme.accentColor};
+`;
+
+// https://api.coinpaprika.com/v1/coins
+const coins = [
+  {
+    id: "btc-bitcoin",
+    name: "Bitcoin",
+    symbol: "BTC",
+    rank: 1,
+    is_new: false,
+    is_active: true,
+    type: "coin",
+  },
+  {
+    id: "eth-ethereum",
+    name: "Ethereum",
+    symbol: "ETH",
+    rank: 2,
+    is_new: false,
+    is_active: true,
+    type: "coin",
+  },
+  {
+    id: "hex-hex",
+    name: "HEX",
+    symbol: "HEX",
+    rank: 3,
+    is_new: false,
+    is_active: true,
+    type: "token",
+  },
+];
+
+function Coins() {
+  return (
+    <Container>
+      <Header>
+        <Title>Crypto Tracker</Title>
+      </Header>
+      <CoinsList>
+        {coins.map((coin) => (
+          <Coin key={coin.id}>
+            <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+          </Coin>
+        ))}
+      </CoinsList>
+    </Container>
+  );
+}
+
+export default Coins;
+```
