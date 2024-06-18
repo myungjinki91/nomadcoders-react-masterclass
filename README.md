@@ -1243,3 +1243,69 @@ function Coins() {
 
 export default Coins;
 ```
+
+## 5.4 Route States
+
+아래 웹사이트에서 암호화폐에 대한 아이콘을 얻을 수 있지만, 최신 아이콘은 없습니다.
+
+https://cryptoicon-api.pages.dev/
+
+https://cryptoicon-api.pages.dev/icons/128/color/yfi.png
+
+따라서 아래 웹사이트를 이용합시다.
+
+https://cryptocurrencyliveprices.com/img/${coin.id}.png
+
+```tsx
+<CoinsList>
+  {coins.map((coin) => (
+    <Coin key={coin.id}>
+      <Link to={`/${coin.id}`}>
+        <Img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`} />
+        {coin.name} &rarr;
+      </Link>
+    </Coin>
+  ))}
+</CoinsList>
+```
+
+이제 만들어야 할 것은 상세페이지입니다. 상세페이지로 이동할 때에도 loading이 뜨는 것은 좋지 않습니다. 이미 기본 정보는 가지고 있기 때문에, 그걸 바탕으로 간단하게 보여줍시다.
+
+`Link`를 사용해서 URL로 정보를 보낼 수도 있지만, `<Link state=””>`를 사용할 수도 있습니다.
+
+https://v5.reactrouter.com/web/api/Link/to-object
+
+```tsx
+  <Link
+    to={{
+      pathname: `/${coin.id}`,
+      state: {
+        name: coin.name,
+      },
+    }}
+  >
+```
+
+그렇다면 이동한 Component는 어떻게 state를 받아올 수 있을까요? 바로 [`useLocation()`](https://v5.reactrouter.com/web/api/Hooks/uselocation)을 사용하면 됩니다.
+
+`<Link>`를 사용해서 Object를 보낼 수 있고, `useLocation()`은 언제나 URL상태를 저장하고 있습니다.
+
+useLocation()의 state를 사용해서 Component를 Rendering하면 단점은, URL을 직접 입력하거나 시크릿모드이면 에러가 발생합니다.
+
+그래서 해당 에러를 `{state?.name || "Loading..."}` 으로 해결해줘야 합니다.
+
+```tsx
+function Coin() {
+  const [loading, setLoading] = useState(true);
+  const { coinId } = useParams<RouteParams>();
+  const { state } = useLocation<RouteState>();
+  return (
+    <Container>
+      <Header>
+        <Title>{state?.name || "Loading..."}</Title>
+      </Header>
+      {loading ? <Loader>Loading...</Loader> : null}
+    </Container>
+  );
+}
+```
