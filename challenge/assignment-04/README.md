@@ -38,3 +38,27 @@
 - Spread Operator 공식문서 참조
 - Object.keys()는 Obeject의 Key값을 배열로 return 해줍니다.
 - Object.keys() 공식문서 참조
+
+# TA's 정답해설
+
+## 1. 카테고리 추가
+
+- 우선 Board를 추가할 수 있는 input과 form을 생성해줍니다. Form은 input의 부모 컴포넌트여야 합니다. 이후, react-hook-form의 register을 적용하기 위해, input의 프로퍼티에 register을 스프레드 연산자로 전달해줍시다.
+- `<AddBoardInput {...register("add")} />`
+- onValid 콜백함수를 작성해줍시다. 해당 함수는 onSubmit 이벤트가 발생할 때, 사용됩니다. 해당 콜백함수는 input에 작성된 text를 받아와 Recoil State의 Object의 key값으로, value로는 빈 Array를 할당해주어야 합니다. 또한, input의 값이 없는 경우(값을 입력하지 않고 submit을 한 경우) if문으로 기본 예외 처리를 해주도록 합시다.
+
+![](https://i.imgur.com/tDi0PIE.png)
+
+- 유효한 값이 들어왔다면, Object의 값을 수정하기 위해서, 아래의 코드와 같이 spread 연산자를 사용합니다. spread 연산자를 사용해 이전 Object 내부의 값을 복사하여 새 Object를 만들고, 새롭게 추가할 key값과 value 값을 추가해줍시다. Input으로 받은 text는 key값을, value로는 빈 Array를 할당해줍시다.
+
+![](https://i.imgur.com/jTdL45W.png)
+
+## 2. recoil-persist
+
+- `npm i recoil-persist`
+- Recoil-persist 설치 후, atoms.tsx에서 import 해줍니다.
+- `import { recoilPersist } from 'recoil-persist'`
+- `const { persistAtom } = recoilPersist()` 이후 영속성을 부여할 atom 내부에 아래의 속성을 추가해줍니다.
+- `effects_UNSTABLE: [persistAtom],`
+
+![](https://i.imgur.com/i4QnkUh.png)
