@@ -1390,3 +1390,92 @@ https://api.coinpaprika.com/#operation/getTickersById
 https://ohlcv-api.nomadcoders.workers.dev?coinId=btc-bitcoin
 
 https://jvilk.com/MakeTypes/
+
+## 5.6 Data Types
+
+API로 받은 데이터의 Data Type을 추가해봅시다.
+
+```tsx
+const [info, setInfo] = useState<any>({});
+const [priceInfo, setPriceInfo] = useState<any>({});
+```
+
+아래 인터페이스를 만들건데, Interface의 이름 앞에 I를 붙이는 경우도 있지만 이번엔 넘어가겠습니다.
+
+```tsx
+interface InfoData {}
+
+interface PriceData {}
+```
+
+Chrome Dev Tools에서 Console창에 나타난 console.log결과 값을 오른쪽 마우스 클릭하면 Store as global variable이 보입니다. 그걸 선택하면 temp1이라는 변수에 저장됩니다.
+
+`Object.keys(temp1).map(e => typeof e).join()`
+
+`Object.values(temp1).map(e => typeof e).join()`
+
+위 명령을 실행하면 key와 value의 Data Type을 알아낼 수 있습니다. 그럼 이걸로 interface를 구성하면 됩니다.
+
+그런데 이렇게 일일이 하기 보다는 서비스를 이용해봅시다.
+
+- https://jvilk.com/MakeTypes/
+- https://app.quicktype.io/?l=ts
+
+```tsx
+interface InfoData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+  logo: string;
+  description: string;
+  message: string;
+  open_source: boolean;
+  started_at: string;
+  development_status: string;
+  hardware_wallet: boolean;
+  proof_type: string;
+  org_structure: string;
+  hash_algorithm: string;
+  first_data_at: string;
+  last_data_at: string;
+}
+
+interface PriceData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  total_supply: number;
+  max_supply: number;
+  beta_value: number;
+  first_data_at: string;
+  last_updated: string;
+  quotes: Quotes;
+}
+interface Quotes {
+  USD: USD;
+}
+interface USD {
+  price: number;
+  volume_24h: number;
+  volume_24h_change_24h: number;
+  market_cap: number;
+  market_cap_change_24h: number;
+  percent_change_15m: number;
+  percent_change_30m: number;
+  percent_change_1h: number;
+  percent_change_6h: number;
+  percent_change_12h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  percent_change_30d: number;
+  percent_change_1y: number;
+  ath_price: number;
+  ath_date: string;
+  percent_from_price_ath: number;
+}
+```
