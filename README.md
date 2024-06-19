@@ -1660,3 +1660,79 @@ function Coin() {
 
 export default Coin;
 ```
+
+## 5.9 React Query part One
+
+React Query를 사용하면 위에 useEffect를 지워도 무방합니다. index.tsx를 수정해줍시다.
+
+React Query가 하는 일은, fetch()가 끝나면 state를 바꾸고 loading도 바꾸는 일을 알아서 해줍니다.
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queyrClient = new QueryClient();
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <QueryClientProvider client={queyrClient}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
+);
+```
+
+코드량이 확 줄었습니다. useEffect()로 일일히 하던 것을 다 알아서 해줍니다. React Query의 또 좋은 점은 알아서 Caching해줍니다.
+
+```tsx
+function Coins() {
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchcoins);
+  return (
+    <Container>
+      <Header>
+        <Title>Crypto Tracker</Title>
+      </Header>
+      {isLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <CoinsList>
+          {data?.slice(0, 100).map((coin) => (
+            <Coin key={coin.id}>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: {
+                    name: coin.name,
+                  },
+                }}
+              >
+                <Img
+                  src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
+                />
+                {coin.name} &rarr;
+              </Link>
+            </Coin>
+          ))}
+        </CoinsList>
+      )}
+    </Container>
+  );
+}
+```
+
+```tsx
+export async function fetchcoins() {
+  return fetch("https://api.coinpaprika.com/v1/coins").then((response) =>
+    response.json()
+  );
+}
+```

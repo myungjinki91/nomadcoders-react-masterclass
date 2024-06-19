@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchcoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -52,7 +53,7 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -62,55 +63,18 @@ interface CoinInterface {
   type: string;
 }
 
-const CACHE_KEY = "coins_data";
-const CACHE_EXPIRY_KEY = "coins_data_expiry";
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
-
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const loadCoins = async () => {
-      try {
-        const cachedData = localStorage.getItem(CACHE_KEY);
-        const cachedExpiry = localStorage.getItem(CACHE_EXPIRY_KEY);
-
-        if (cachedData && cachedExpiry && Date.now() < Number(cachedExpiry)) {
-          // Use cached data if available and not expired
-          setCoins(JSON.parse(cachedData));
-          setLoading(false);
-        } else {
-          // Fetch new data from the API
-          const response = await fetch("https://api.coinpaprika.com/v1/coins");
-          const data: Array<CoinInterface> = await response.json();
-          setCoins(data.slice(0, 100));
-          setLoading(false);
-
-          // Cache the new data and set expiry
-          localStorage.setItem(CACHE_KEY, JSON.stringify(data.slice(0, 100)));
-          localStorage.setItem(
-            CACHE_EXPIRY_KEY,
-            (Date.now() + CACHE_DURATION).toString()
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching coins data:", error);
-        setLoading(false);
-      }
-    };
-
-    loadCoins();
-  }, []);
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchcoins);
   return (
     <Container>
       <Header>
         <Title>Crypto Tracker</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link
                 to={{
