@@ -16,7 +16,7 @@ Here are some of the best To Do submissions! 모든 수고하셨습니다!:
 ## Code Challenge:
 
 - #8.0 ~ #8.16을 수강하고, Framer-motion을 이용해 영상에 보이는 것과 동일한 애니메이션을 제작해주세요.
-- ![](./kqL53Q9.mp4)
+- ![](kqL53Q9.mp4)
 
 ## Hints:
 
