@@ -9,25 +9,27 @@
 
 Is this valid styled components code?
 
+```jsx
 const Box = styled.div`
     backgroundColor:"red",
     width:200,
     height:200,
 `;
+```
 
 ## QUESTION 2 OF 7
 
 When we do this:
 
-```js
+```jsx
 const Text = styled.span`
-    color:tomato;
+  color: tomato;
 `;
 ```
 
 The resulting element will have a style tag like this:
 
-<span style="color:tomato;"></span>
+`<span style="color:tomato;"></span>`
 
 ## QUESTION 3 OF 7
 
@@ -39,13 +41,15 @@ Yes.
 
 If I send a textColor prop to my styled component, how can I use it on the styles?
 
-color: ${props => props.textColor};
+`color: ${props => props.textColor};`
 
 ## QUESTION 5 OF 7
 
 How can I extend a styled component?
 
+```jsx
 const B = styled(A)``;
+```
 
 ## QUESTION 6 OF 7
 
@@ -57,7 +61,7 @@ It changes the component's resulting HTML tag
 
 Is doing this:
 
-```js
+```jsx
 span {
     color:blue;
     &:hover {
@@ -68,7 +72,7 @@ span {
 
 the same as:
 
-```js
+```jsx
 span {
     color:blue;
 }

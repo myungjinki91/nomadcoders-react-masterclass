@@ -22,8 +22,8 @@ const user = {
   firstName: "Angela",
   lastName: "Davis",
   role: "Professor",
-}
-console.log(user.name)
+};
+console.log(user.name);
 ```
 
 ## QUESTION 4 OF 12
@@ -31,7 +31,7 @@ console.log(user.name)
 This is valid Typescript syntax.
 
 ```tsx
-const plus = (number:a, number:b) => a + b;
+const plus = (number: a, number: b) => a + b;
 ```
 
 ## QUESTION 5 OF 12
@@ -51,7 +51,7 @@ DefinitelyTyped has the type definitions of all npm packages.
 ## QUESTION 8 OF 12
 
 Using PropTypes and Typescript to check props is the same.
- Typescript checks before the code runs.
+Typescript checks before the code runs.
 
 ## QUESTION 9 OF 12
 
@@ -81,5 +81,5 @@ Typescript will complain about this code:
 
 ```tsx
 const [value, setValue] = useState(true);
-setValue("hello")
+setValue("hello");
 ```

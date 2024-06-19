@@ -1,10 +1,12 @@
 # Crypto Tracker
+
 - 오늘의 강의: React JS 마스터클래스: From #5.0 to #5.16
 - 오늘의 과제: 위의 강의를 시청하신 후, 아래 코드 챌린지를 제출하면 됩니다.
 - 제출기간: 3일 챌린지! 72시간. 토요일 오전 6시까지
 - Watch all the section #4 and complete the code challenge.
 
 ## Code Challenge:
+
 - 누르면 다크모드가 적용되는 토글 버튼을 만들어주세요.
 - /:coinId에서 홈으로 돌아갈 수 있는 버튼을 만들어주세요.
 - 강의에서 구현하지 않은 Coin의 /:coinId/price탭을 구현해주세요.
@@ -54,8 +56,8 @@ const { data, isLoading } = useQuery([“queryKey”], queryFunction);
 ## 이외의 팁
 
 - Coin탭은 Chart와 Price를 render하기 위해 중첩 라우팅을 사용해야 합니다. 중첩 라우팅에는 두 가지 방식이 있습니다.
-    - V6 Descendant Routes(강의Ver) [Descendant Routes 공식문서 참조](https://reactrouter.com/docs/en/v6/getting-started/overview#descendant-routes)
-    - V6 Nested Route [Nested Route 공식문서 참조](https://reactrouter.com/docs/en/v6/getting-started/overview#nested-routes)
+  - V6 Descendant Routes(강의Ver) [Descendant Routes 공식문서 참조](https://reactrouter.com/docs/en/v6/getting-started/overview#descendant-routes)
+  - V6 Nested Route [Nested Route 공식문서 참조](https://reactrouter.com/docs/en/v6/getting-started/overview#nested-routes)
 - V5로 구현할 경우, Routes를 Switch로 바꿔주신 뒤, 각 Route 컴포넌트에 렌더링을 할 컴포넌트를 넣어주시면 됩니다.
 - React에서 Home과 같은 특정 페이지로 이동해야 할 때, <a>를 사용하는 건 좋은 방법이 아닙니다. <Link />를 사용해봅시다!
 - [<Link> 공식문서 참조](https://reactrouter.com/docs/en/v6/components/link)
@@ -99,7 +101,7 @@ const { data, isLoading } = useQuery([“queryKey”], queryFunction);
 
 - 중첩 라우팅을 구현하는 방식 크게 Nested Route 방식과 Descendant Routes 방식으로 나뉩니다.
 - Nested Route 방식(V6)은 하나의 Switch(또는 Routes) 안의 Route 내부에 또 다른 Route를 넣음으로써 모든 Route의 경로를 사전에 구성하는 방식입니다. 해당 방식은 <Outlet />을 이용해 컴포넌트를 렌더링 할 위치를 결정합니다.
-- 한편, 수업에서는 Descendant Route 방식을 채택합니다. 해당 방식은 하위 Route가 없는 Route들로 구성된 여러 Switch(또는 Routes)를 생성한 뒤, Route의 컴포넌트 내부에 다시 Switch(Routes)를 할당하는 방식입니다. 대신 Route의 하위 컴포넌트에 또 다른 Switch(Routes)를 사용하기 위해, 상위 Route의 path의 마지막에 “/*”를 명시해주어야 합니다.
+- 한편, 수업에서는 Descendant Route 방식을 채택합니다. 해당 방식은 하위 Route가 없는 Route들로 구성된 여러 Switch(또는 Routes)를 생성한 뒤, Route의 컴포넌트 내부에 다시 Switch(Routes)를 할당하는 방식입니다. 대신 Route의 하위 컴포넌트에 또 다른 Switch(Routes)를 사용하기 위해, 상위 Route의 path의 마지막에 “/\*”를 명시해주어야 합니다.
 
 ## 4. ApexChart(CandleStick)
 
