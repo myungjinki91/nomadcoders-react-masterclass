@@ -1736,3 +1736,65 @@ export async function fetchcoins() {
   );
 }
 ```
+
+## 5.10 React Query part Two
+
+이번엔 상세페이지도 적용해봅시다.
+
+그 전에 ReactQueryDevtools를 사용하면 Caching된 데이터를 확인할 수 있습니다.
+
+```tsx
+import { ReactQueryDevtools } from "react-query/devtools";
+
+function App() {
+  return (
+    <>
+      <GlobalStyle />
+      <Router />
+      <ReactQueryDevtools initialIsOpen={true} />
+    </>
+  );
+}
+```
+
+React Query는 key로 query를 관리합니다. key가 중복된다면 Array를 사용합시다.
+
+```tsx
+function Coin() {
+  const { coinId } = useParams<RouteParams>();
+  const { state } = useLocation<RouteState>();
+  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/:coinId/chart");
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
+    ["tickers", coinId],
+    () => fetchCoinTickers(coinId)
+  );
+
+  const loading = infoLoading || tickersLoading;
+```
+
+fetch에 props를 전달하려면 이렇게 하면됩니다.
+
+```tsx
+const BASE_URL = `https://api.coinpaprika.com/v1`;
+
+export function fetchCoins() {
+  return fetch(`${BASE_URL}/coins`).then((response) => response.json());
+}
+
+export function fetchCoinInfo(coinId: string) {
+  return fetch(`${BASE_URL}/coins/${coinId}`).then((response) =>
+    response.json()
+  );
+}
+
+export function fetchCoinTickers(coinId: string) {
+  return fetch(`${BASE_URL}/tickers/${coinId}`).then((response) =>
+    response.json()
+  );
+}
+```
