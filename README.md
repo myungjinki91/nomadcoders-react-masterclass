@@ -1578,3 +1578,85 @@ Nested Routes는 이 부분입니다.
   </Route>
 </Switch>
 ```
+
+## 5.8 Nested Routes part Two
+
+React Router는 충분히 똑똑해서 아래와 같이 바꿔도 잘 동작합니다.
+
+```tsx
+<Switch>
+  <Route path={`/:coinId/price`}>
+    <Price />
+  </Route>
+  <Route path={`/:coinId/chart`}>
+    <Chart />
+  </Route>
+</Switch>
+```
+
+React Router의 useRouteMatch()를 사용해봅시다. URL이 정확하게 일치한다면 Object를 반환하고 아니면 null을 반환합니다.
+
+Styled Components의 Component Props에 TypeScript를 적용하는 방법도 알아봅시다.
+
+```tsx
+import {
+  Link,
+  Route,
+  Switch,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ isactive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.isactive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
+function Coin() {
+
+  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/:coinId/chart");
+
+  return (
+    <Container>
+          <Tabs>
+            <Tab isactive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isactive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
+          <Switch>
+            <Route path={`/:coinId/price`}>
+              <Price />
+            </Route>
+            <Route path={`/:coinId/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
+        </>
+      )}
+    </Container>
+  );
+}
+
+export default Coin;
+```
