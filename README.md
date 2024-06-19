@@ -1479,3 +1479,102 @@ interface USD {
   percent_from_price_ath: number;
 }
 ```
+
+## 5.7 Nested Routes part One
+
+저번에 까먹었는데 setLoading(false)를 설정해주세요.
+
+useEffect(() => {}, [])에서 []에 경고가 있을겁니다. 만약, useEffect 내부에서 state를 사용한다면, 의존성이 추가되기 때문에 useEffect에도 알려줘야 합니다.
+
+이제 CSS는 코드로 보여줄 겁니다.
+
+```tsx
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+const Description = styled.p`
+  margin: 20px 0px;
+`;
+```
+
+```tsx
+  return (
+    <Container>
+      <Header>
+        <Title>{state?.name || "Loading..."}</Title>
+      </Header>
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Suply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+          <Switch>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+            <Route path={`/${coinId}/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
+        </>
+      )}
+    </Container>
+```
+
+Title을 자세히 보면, React Router를 사용한 state가 null일 경우엔 loading을 확인합니다.
+
+```tsx
+<Title>{state?.name ? state.name : loading ? "Loading..." : info?.name}</Title>
+```
+
+Nested Routes는 이 부분입니다.
+
+```tsx
+<Switch>
+  <Route path={`/${coinId}/price`}>
+    <Price />
+  </Route>
+  <Route path={`/${coinId}/chart`}>
+    <Chart />
+  </Route>
+</Switch>
+```
