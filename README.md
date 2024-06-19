@@ -1798,3 +1798,50 @@ export function fetchCoinTickers(coinId: string) {
   );
 }
 ```
+
+## 5.12 Price Chart
+
+자체 URL: [**https://ohlcv-api.nomadcoders.workers.dev**](https://ohlcv-api.nomadcoders.workers.dev/)
+
+사용을 위해서는. 파라미터로 `coinId` 를 추가하세요. [**https://ohlcv-api.nomadcoders.workers.dev?coinId=btc-bitcoin**](https://ohlcv-api.nomadcoders.workers.dev/?coinId=btc-bitcoin)
+
+아래와 같이 useParams를 사용해도 되지만 굳이?
+
+```tsx
+import { useParams } from "react-router";
+
+function Chart() {
+  const { coinId } = useParams<{ coinId: string }>();
+  return <h1>Chart</h1>;
+}
+
+export default Chart;
+```
+
+```tsx
+import { useQuery } from "react-query";
+import { fetchCoinHistory } from "../api";
+
+interface ChartProps {
+  coinId: string;
+}
+
+function Chart({ coinId }: ChartProps) {
+  const { isLoading, data } = useQuery(["ohlcv", coinId], () =>
+    fetchCoinHistory(coinId)
+  );
+  return <h1>Chart</h1>;
+}
+
+export default Chart;
+```
+
+```tsx
+export function fetchCoinHistory(coinId: string) {
+  //   const endDate = Math.floor(Date.now() / 1000);
+  //   const startDate = endDate - 60 * 60 * 24 * 7;
+  return fetch(
+    `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
+  ).then((response) => response.json());
+}
+```
