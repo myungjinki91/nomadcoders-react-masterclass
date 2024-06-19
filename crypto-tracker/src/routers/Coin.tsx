@@ -31,14 +31,15 @@ interface RouteParams {
 interface RouteState {
   name: string;
 }
+
 const CACHE_EXPIRY_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
 
 function Coin() {
   const [loading, setLoading] = useState(true);
-  const { coinId } = useParams<RouteParams>();
-  const { state } = useLocation<RouteState>();
   const [info, setInfo] = useState<any>({});
   const [priceInfo, setPriceInfo] = useState<any>({});
+  const { coinId } = useParams<RouteParams>();
+  const { state } = useLocation<RouteState>();
 
   useEffect(() => {
     const loadCoinData = async () => {
@@ -83,6 +84,7 @@ function Coin() {
 
   console.log(info);
   console.log(priceInfo);
+
   return (
     <Container>
       <Header>
