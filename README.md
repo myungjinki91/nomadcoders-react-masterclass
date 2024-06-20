@@ -1962,3 +1962,66 @@ function Chart({ coinId }: ChartProps) {
 
 export default Chart;
 ```
+
+## 5.14 Price Chart part Three
+
+이거 다 못외워요. 그냥 사람들이 만든거 쓰세요.
+
+```tsx
+<ApexChart
+  type="line"
+  series={[
+    {
+      name: "Price",
+      data: data?.map((price) => parseFloat(price.close)) ?? [],
+    },
+  ]}
+  options={{
+    theme: {
+      mode: "dark",
+    },
+    chart: {
+      height: 500,
+      width: 500,
+      toolbar: {
+        show: false,
+      },
+      background: "transparent",
+    },
+    grid: {
+      show: false,
+    },
+    stroke: {
+      curve: "smooth",
+      width: 3,
+    },
+    yaxis: {
+      show: false,
+    },
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+      labels: {
+        show: false,
+      },
+      type: "datetime",
+      categories:
+        data?.map((price) => new Date(price.time_close * 1000).toUTCString()) ??
+        [],
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        gradientToColors: ["#0be881"],
+        stops: [0, 100],
+      },
+    },
+    colors: ["#0fbcf9"],
+    tooltip: {
+      y: {
+        formatter: (value) => `$${value.toFixed(2)}`,
+      },
+    },
+  }}
+/>
+```
