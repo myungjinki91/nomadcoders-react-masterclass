@@ -2060,3 +2060,9 @@ Helmet은 `<head>`로 가는 Direct link입니다.
   </title>
 </Helmet>
 ```
+
+## 5.16 Conclusions
+
+1. 뒤로가기 버튼
+2. Price 탭
+3. Chart에서 candlestick
