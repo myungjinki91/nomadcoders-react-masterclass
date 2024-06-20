@@ -2066,3 +2066,17 @@ Helmet은 `<head>`로 가는 Direct link입니다.
 1. 뒤로가기 버튼
 2. Price 탭
 3. Chart에서 candlestick
+
+## 6.0 Dark Mode part One
+
+Recoil은 페이스북이 만들었습니다.
+
+https://recoiljs.org/ko
+
+state management가 뭘까요? state management는 왜 필요할까요?
+
+도구와 기술은 문제를 해결하기 위해 만들어집니다. 문제를 직접 경험한다면, 도구와 기술도 더 잘 이해할 수 있게 됩니다.
+
+다크모드/라이트모드를 Recoil없이 구현하려면 조금 수정해야 합니다.
+
+ThemerPovider를 옮긴 이유는 state를 사용하기 위해서였습니다.
