@@ -2025,3 +2025,38 @@ export default Chart;
   }}
 />
 ```
+
+## 5.15 Final Touches
+
+useQuery에서 유용한 기능인 refetching은 3번 째 argument에서 설정할 수 있습니다.
+
+```tsx
+const { isLoading, data } = useQuery<IHistorical[]>(
+  ["ohlcv", coinId],
+  () => fetchCoinHistory(coinId),
+  {
+    refetchInterval: 10000,
+  }
+);
+```
+
+그리고 Browser tab의 title을 바꾸고 싶은데, React Helmet을 사용해봅시다.
+
+```bash
+ npm i react-helmet
+ npm i --save-dev @types/react-helmet
+```
+
+Helmet은 왜 쓸까요? Helmet Component는 index.html의 head를 수정합니다. Component로 수정할 수 있게 됩니다.
+
+Helmet으로 title말고, CSS, favicon도 수정할 수 있습니다.
+
+Helmet은 `<head>`로 가는 Direct link입니다.
+
+```tsx
+<Helmet>
+  <title>
+    {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+  </title>
+</Helmet>
+```
