@@ -1845,3 +1845,120 @@ export function fetchCoinHistory(coinId: string) {
   ).then((response) => response.json());
 }
 ```
+
+## 5.13 Price Chart part Two
+
+그래프를 그리기 위해 APEXCHARTS.JS를 사용할 겁니다.
+
+https://apexcharts.com/
+
+React에 적용하기 위해 react-apexcharts도 설치해줍시다.
+
+```bash
+npm install --save apexcharts react-apexcharts
+```
+
+이렇게 사용합니다.
+
+```tsx
+<ApexChart
+  type="line"
+  series={[
+    {
+      name: "hello",
+      data: [1, 2, 3, 4, 5, 6],
+    },
+    {
+      name: "sales",
+      data: [15, 18, 15, 78, 56],
+    },
+  ]}
+  options={{
+    theme: {
+      mode: "dark",
+    },
+    chart: {
+      height: 500,
+      width: 500,
+    },
+  }}
+/>
+```
+
+다양한 옵션을 수정해봅시다.
+
+```tsx
+import { useQuery } from "react-query";
+import { fetchCoinHistory } from "../api";
+import ApexChart from "react-apexcharts";
+
+interface IHistorical {
+  time_open: number;
+  time_close: number;
+  open: string;
+  high: string;
+  low: string;
+  close: string;
+  volume: string;
+  market_cap: number;
+}
+
+interface ChartProps {
+  coinId: string;
+}
+
+function Chart({ coinId }: ChartProps) {
+  const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
+    fetchCoinHistory(coinId)
+  );
+  return (
+    <div>
+      {isLoading ? (
+        "Loading..."
+      ) : (
+        <ApexChart
+          type="line"
+          series={[
+            {
+              name: "Price",
+              data: data?.map((price) => parseFloat(price.close)) ?? [],
+            },
+          ]}
+          options={{
+            theme: {
+              mode: "dark",
+            },
+            chart: {
+              height: 500,
+              width: 500,
+              toolbar: {
+                show: false,
+              },
+              background: "transparent",
+            },
+            grid: {
+              show: false,
+            },
+            stroke: {
+              curve: "smooth",
+              width: 3,
+            },
+            yaxis: {
+              show: false,
+            },
+            xaxis: {
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+              labels: {
+                show: false,
+              },
+            },
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+export default Chart;
+```
