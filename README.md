@@ -2409,3 +2409,61 @@ function ToDoList() {
 }
 export default ToDoList;
 ```
+
+## 6.7 Form Validation
+
+여러분의 길고 긴 onSubmit이 이렇게 짧아졌습니다.
+
+```tsx
+function ToDoList() {
+  const { register, handleSubmit } = useForm();
+  const onValid = (data: any) => console.log(data);
+  return (
+    <div>
+      <form onSubmit={handleSubmit(onValid)}>
+        <input {...register("Email")} placeholder="Email" />
+        <input {...register("firstName")} placeholder="firstName" />
+        <input {...register("lastName")} placeholder="lastName" />
+        <input {...register("username")} placeholder="username" />
+        <input {...register("password")} placeholder="password" />
+        <input {...register("password1")} placeholder="password1" />
+        <button>Add</button>
+      </form>
+    </div>
+  );
+}
+export default ToDoList;
+```
+
+Email을 반드시 입력하도록 하고 싶습니다. 둘은 뭐가 다를까요?
+
+```tsx
+        <input {...register("email")} required placeholder="email" />
+        <input {...register("email", { required: true })} placeholder="email" />
+```
+
+1번은 HTML에서 제공하는 required기능을 사용합니다. 그런데 해커가 HTML을 수정해서 submit하면…? 막을 방법이 없습니다. 당해야죠 뭐.
+
+그러나 2번은 라이브러리가 잘 처리해줍니다. 버튼 클릭 시, 입력되지 않은 input으로 커서가 이동합니다!
+에러도 `formState.error`로 확인할 수 있습니다.
+
+```tsx
+const { register, handleSubmit, formState } = useForm();
+const onValid = (data: any) => console.log(data);
+console.log(formState.errors);
+```
+
+에러 처리를 아래처럼하고, 에러 메시지도 설정할 수 있습니다.
+
+```tsx
+<input
+  {...register("password1", {
+    required: "Password is required",
+    minLength: {
+      value: 5,
+      message: "Your password is too short.",
+    },
+  })}
+  placeholder="password1"
+/>
+```
