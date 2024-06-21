@@ -65,10 +65,7 @@ interface ICoin {
   is_active: boolean;
   type: string;
 }
-
-interface ICoinsProps {}
-
-function Coins({}: ICoinsProps) {
+function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   const setDarkAtom = useSetRecoilState(isDarkAtom);
   const toggleDArkAtom = () => {

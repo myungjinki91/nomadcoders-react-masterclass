@@ -144,9 +144,7 @@ interface USD {
   percent_from_price_ath: number;
 }
 
-interface ICoinProps {}
-
-function Coin({}: ICoinProps) {
+function Coin() {
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
   const priceMatch = useRouteMatch("/:coinId/price");
