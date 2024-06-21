@@ -2080,3 +2080,51 @@ state management가 뭘까요? state management는 왜 필요할까요?
 다크모드/라이트모드를 Recoil없이 구현하려면 조금 수정해야 합니다.
 
 ThemerPovider를 옮긴 이유는 state를 사용하기 위해서였습니다.
+
+```tsx
+function App() {
+  const [isDark, setIsDark] = useState(true);
+  const toggleDark = () => setIsDark((current) => !current);
+  return (
+    <>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <button onClick={toggleDark}>Toggle Theme</button>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
+    </>
+  );
+}
+```
+
+```tsx
+import "styled-components";
+
+declare module "styled-components" {
+  export interface DefaultTheme {
+    textColor: string;
+    bgColor: string;
+    accentColor: string;
+    cardBgColor: string;
+  }
+}
+```
+
+```tsx
+import { DefaultTheme } from "styled-components";
+
+export const darkTheme: DefaultTheme = {
+  bgColor: "#2f3640",
+  textColor: "white",
+  accentColor: "#9c88ff",
+  cardBgColor: "transparent",
+};
+
+export const lightTheme: DefaultTheme = {
+  bgColor: "whitesmoke",
+  textColor: "black",
+  accentColor: "#9c88ff",
+  cardBgColor: "white",
+};
+```
