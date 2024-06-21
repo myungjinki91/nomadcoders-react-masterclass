@@ -2267,3 +2267,46 @@ const setterFn = useSetRecoilState(isDarkAtom);
         <button onClick={toggleDArkAtom}>Toggle Mode</button>
       </Header>
 ```
+
+## 6.5 To Do Setup
+
+새로운 프로젝트를 시작해봅시다.
+
+```bash
+npx create-react-app to-do-list --template typescript
+npm i --save-dev @types/styled-components
+npm i styled-components
+npm i recoil
+```
+
+잠시 React Router, React Query는 잊어버리고, Recoil에 집중해봅시다.
+
+우리 항상 하던 코드 만들어 봅시다.
+
+```tsx
+import { useState } from "react";
+
+function ToDoList() {
+  const [toDo, setToDo] = useState("");
+  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const {
+      currentTarget: { value },
+    } = event;
+    setToDo(value);
+  };
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(toDo);
+  };
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <input onChange={onChange} value={toDo} placeholder="Write a to do" />
+        <button>Add</button>
+      </form>
+    </div>
+  );
+}
+
+export default ToDoList;
+```
