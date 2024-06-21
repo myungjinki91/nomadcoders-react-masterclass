@@ -2310,3 +2310,102 @@ function ToDoList() {
 
 export default ToDoList;
 ```
+
+## 6.6 Forms
+
+수 많은 form 라이브러리를 사용했지만 이건 최고입니다.
+
+[https://react-hook-form.com](https://react-hook-form.com/)
+
+```bash
+npm install react-hook-form
+```
+
+form 작업은 지루합니다.
+
+```tsx
+import { useState } from "react";
+
+function ToDoList() {
+  const [toDo, setToDo] = useState("");
+  const [toDoError, setToDoError] = useState("");
+  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const {
+      currentTarget: { value },
+    } = event;
+    setToDoError("");
+    setToDo(value);
+  };
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (toDo.length < 10) {
+      return setToDoError("To do should be longer");
+    }
+    console.log("submit");
+  };
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <input onChange={onChange} value={toDo} placeholder="Write a to do" />
+        <button>Add</button>
+        {toDoError !== "" ? toDoError : null}
+      </form>
+    </div>
+  );
+}
+
+export default ToDoList;
+```
+
+지금 form이 1개여서 그렇지, 입력이 50개면 이거 처리 다 해줘야 합니다…
+
+바로 사용해봅시다.
+
+```tsx
+const { register } = useForm();
+```
+
+register에는 많은 기능이 있습니다. 그 전에 잠깐! HTML <input>에 대해 더 알아봅시다.
+
+- onClick: input을 클릭했을때
+- onChange: input에 입력할 때
+- onBlur: input을 벗어났을 때
+
+```tsx
+function ToDoList() {
+  const { register, watch } = useForm();
+  console.log(watch());
+  return (
+    <div>
+      <form>
+        <input {...register("toDo")} placeholder="Write a to do" />
+        <button>Add</button>
+      </form>
+    </div>
+  );
+}
+export default ToDoList;
+```
+
+여러 개도 가능합니다!
+
+```tsx
+function ToDoList() {
+  const { register, watch } = useForm();
+  console.log(watch());
+  return (
+    <div>
+      <form>
+        <input {...register("Email")} placeholder="Email" />
+        <input {...register("firstName")} placeholder="firstName" />
+        <input {...register("lastName")} placeholder="lastName" />
+        <input {...register("username")} placeholder="username" />
+        <input {...register("password")} placeholder="password" />
+        <input {...register("password1")} placeholder="password1" />
+        <button>Add</button>
+      </form>
+    </div>
+  );
+}
+export default ToDoList;
+```
