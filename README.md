@@ -2695,3 +2695,69 @@ function ToDoList() {
 }
 export default ToDoList;
 ```
+
+## 6.11 Add To Do
+
+와 `useRecoilState()` 참 `useState()` 닮았다 그쵸?
+
+```tsx
+import { useForm } from "react-hook-form";
+import { atom, useRecoilState } from "recoil";
+
+interface IData {
+  toDo: string;
+}
+
+interface IToDo {
+  text: string;
+  id: number;
+  category: "TO_DO" | "DOING" | "DONE";
+}
+
+const toDoState = atom<IToDo[]>({
+  key: "toDo",
+  default: [],
+});
+
+function ToDoList() {
+  const [toDos, setTodos] = useRecoilState(toDoState);
+  const { register, handleSubmit, setValue } = useForm<IData>();
+  const handleValid = ({ toDo }: IData) => {
+    setTodos([{ text: toDo, id: Date.now(), category: "TO_DO" }, ...toDos]);
+    setValue("toDo", "");
+  };
+  return (
+    <div>
+      <form onSubmit={handleSubmit(handleValid)}>
+        <input
+          {...register("toDo", {
+            required: "Please write a To Do",
+          })}
+          placeholder="Write a to do"
+        />
+        <button>Add</button>
+      </form>
+      <ul>
+        {toDos.map((toDo) => (
+          <li key={toDo.id}>{toDo.text}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+export default ToDoList;
+```
+
+여기서 주의할 점! Global state toDos는 타입이 never입니다. 왜냐! 타입이 안정해져있죠? 정해줍시다.
+
+```tsx
+interface IToDo {
+  text: string;
+  category: "TO_DO" | "DOING" | "DONE";
+}
+
+const toDoState = atom<IToDo[]>({
+  key: "toDo",
+  default: [],
+});
+```
