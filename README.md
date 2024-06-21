@@ -2590,3 +2590,73 @@ const {
   },
 });
 ```
+
+## 6.9 Custom Validation
+
+이전 에러처리는 React Hook Form이 지원하는 에러처리입니다. 이것들을 다 통과하고 난 후 발생한 API오류는 직접 처리해줘야 합니다. 어떻게 할까요~~
+
+onSubmit에 handleSubmit을 사용합시다.
+
+```tsx
+type IForm = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+  password1: string;
+  extraError?: string;
+};
+
+function ToDoList() {;
+  const onValid = (data: IForm) => {
+    if (data.password !== data.password1) {
+      return setError("password1", { message: "Password are not the same" });
+    }
+    setError("extraError", { message: "Extra error" });
+  };
+  return (
+    <div>
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={handleSubmit(onValid)}
+      >
+        <button>Add</button>
+        <span>{errors?.extraError?.message}</span>
+      </form>
+    </div>
+  );
+```
+
+커서를 특정할 수도 있습니다.
+
+```tsx
+const onValid = (data: IForm) => {
+  if (data.password !== data.password1) {
+    return setError(
+      "password1",
+      { message: "Password are not the same" },
+      { shouldFocus: true }
+    );
+  }
+  setError("extraError", { message: "Extra error" });
+};
+```
+
+특정 입력만 Error를 일으킬 수도 있습니다.
+
+```tsx
+        <input
+          {...register("firstName", {
+            required: "write here",
+            validate: {
+              noNiko: (value) =>
+                value.includes("nico") ? "no nicos allowed" : true,
+              noNick: (value) =>
+                value.includes("nick") ? "no nick allowed" : true,
+            },
+          })}
+          placeholder="firstName"
+        />
+        <span>{errors?.firstName?.message}</span>
+```
