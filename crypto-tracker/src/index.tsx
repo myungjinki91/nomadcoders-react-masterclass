@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
+import { RecoilRoot } from "recoil";
 
 const queyrClient = new QueryClient();
 
@@ -10,8 +11,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queyrClient}>
-      <App />
-    </QueryClientProvider>
+    <RecoilRoot>
+      <QueryClientProvider client={queyrClient}>
+        <App />
+      </QueryClientProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

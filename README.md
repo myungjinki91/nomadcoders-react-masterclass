@@ -2184,3 +2184,66 @@ Global State가 해결책입니다. Global State는 어느 Component나 공유�
 코드가 너무 복잡해지지 않을까요?
 
 Global state는 Bubble을 연상하면 좋습니다.
+
+## 6.2 Introduction to Recoil
+
+Recoil에서는 Bubble이란 표현을 Atom으로 사용합니다.
+
+설치는 쉽죠
+
+```bash
+npm i recoil
+```
+
+index.tsx에도 적용해줍시다.
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import App from "./App";
+import { RecoilRoot } from "recoil";
+
+const queyrClient = new QueryClient();
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <RecoilRoot>
+      <QueryClientProvider client={queyrClient}>
+        <App />
+      </QueryClientProvider>
+    </RecoilRoot>
+  </React.StrictMode>
+);
+```
+
+그리고 atoms.ts를 만듭시다.
+
+```tsx
+import { atom } from "recoil";
+
+export const isDarkAtom = atom({
+  key: "isDark",
+  default: false,
+});
+```
+
+App에서는 이렇게 사용합니다.
+
+```tsx
+function App() {
+  const isDark = useRecoilValue(isDarkAtom);
+  return (
+    <>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
+    </>
+  );
+}
+```
