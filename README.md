@@ -2247,3 +2247,23 @@ function App() {
   );
 }
 ```
+
+## 6.3 Introduction to Recoil part Two
+
+그러면 수정은 어떻게 하죠?
+
+```tsx
+const setterFn = useSetRecoilState(isDarkAtom);
+```
+
+```tsx
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDArkAtom = () => {
+    setDarkAtom((prev) => !prev);
+  };
+  return (
+      <Header>
+        <Title>Crypto Tracker</Title>
+        <button onClick={toggleDArkAtom}>Toggle Mode</button>
+      </Header>
+```
