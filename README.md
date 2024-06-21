@@ -2128,3 +2128,59 @@ export const lightTheme: DefaultTheme = {
   cardBgColor: "white",
 };
 ```
+
+## 6.1 Dark Mode part Two
+
+원래는 ThemeProvider가 index에 있다가, App으로 옮겨졌습니다. 그래서 토글 버튼도 App에 만들었습니다.
+
+그런데 이 토글 버튼을 Coins에 있는 Title 옆에 두고 싶습니다. 그러려면 App에 있는 setIsDark()를 Router를 거쳐 Coins까지 전달해야 합니다.
+
+그리고 Chart는 가장 하위 컴포넌트인데, 만약 App에서 사용하는 isDark를 Chart에서도 사용하고 싶다면…?
+
+물론 상위 컴포넌트에서 만든 상태를 엄청 아래아래 하위 컴포넌트까지 전달할 수도 있지만, 이게 복잡해진다면??? 컴포넌트가 만개라면?
+
+```tsx
+function App() {
+  const [isDark, setIsDark] = useState(true);
+  const toggleDark = () => setIsDark((current) => !current);
+  return (
+    <>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <Router isDark={isDark} toggleDark={toggleDark} />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
+    </>
+  );
+}
+```
+
+```tsx
+interface IRouterProps {
+  toggleDark: () => void;
+  isDark: boolean;
+}
+
+function Router({ toggleDark, isDark }: IRouterProps) {
+  return (
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <Switch>
+        <Route path="/:coinId">
+          <Coin isDark={isDark} />
+        </Route>
+        <Route path="/">
+          <Coins toggleDark={toggleDark} />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
+}
+```
+
+Global State가 해결책입니다. Global State는 어느 Component나 공유합니다.
+
+예를 들어 isLogin 상태가 있다고 해봅시다. 로그인 상태는 다양한 컴포넌트가 관심있어 하는 상태입니다. 유저가 로그인을 했는지 안했는지 알고 싶은 컴포넌트는 꽤나 많을겁니다. 일일히 컴포넌트에 props로 넘겨줘야 할까요?
+
+코드가 너무 복잡해지지 않을까요?
+
+Global state는 Bubble을 연상하면 좋습니다.
