@@ -25,6 +25,8 @@ function ToDoList() {
   };
   return (
     <div>
+      <h1>To Dos</h1>
+      <hr />
       <form onSubmit={handleSubmit(handleValid)}>
         <input
           {...register("toDo", {
