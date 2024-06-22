@@ -2928,3 +2928,33 @@ setToDos((oldToDos) => {
   return oldToDos;
 });
 ```
+
+## 6.15 Immutability part Two
+
+slice를 사용해서 newToDo로 삭 교채해봅시다.
+
+```tsx
+return [
+  ...oldToDos.slice(0, targetIndex),
+  newToDo,
+  ...oldToDos.slice(targetIndex + 1),
+];
+```
+
+```tsx
+const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const {
+    currentTarget: { name },
+  } = event;
+  setToDos((oldToDos) => {
+    const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
+    const oldToDo = oldToDos[targetIndex];
+    const newToDo = { text, id, category: name as any };
+    return [
+      ...oldToDos.slice(0, targetIndex),
+      newToDo,
+      ...oldToDos.slice(targetIndex + 1),
+    ];
+  });
+};
+```
