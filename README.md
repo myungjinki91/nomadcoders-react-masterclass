@@ -3027,3 +3027,87 @@ function ToDoList() {
 ```
 
 selector의 핵심은 state를 바꾸지 않고 output만 바꾸는 겁니다.
+
+## 6.17 Selectors part Two
+
+selector는 다시 말하지만 state를 바꾸지 않고, state를 분류할 수 있습니다.
+
+이번에 해볼 것은 HTML select를 만들어서 해당 category만 rendering하는 겁니다.
+
+```tsx
+export const categoryState = atom({
+  key: "category",
+  default: "TO_DO",
+});
+```
+
+```
+function ToDoList() {
+  const [toDo, doing, done] = useRecoilValue(toDoSelector);
+  const [category, setCategory] = useRecoilState(categoryState);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCategory(event.currentTarget.value);
+  };
+  return (
+    <div>
+      <h1>To Dos</h1>
+      <hr />
+      <select onInput={onInput}>
+        <option value="TO_DO">To Do</option>
+        <option value="DOING">Doing</option>
+        <option value="DONE">Done</option>
+      </select>
+      <CreateToDo />
+      {category === "TO_DO" &&
+        toDo.map((toDo) => <ToDo key={toDo.id} {...toDo} />)}
+      {category === "DOING" &&
+        doing.map((toDo) => <ToDo key={toDo.id} {...toDo} />)}
+      {category === "DONE" &&
+        done.map((toDo) => <ToDo key={toDo.id} {...toDo} />)}
+    </div>
+  );
+}
+
+```
+
+어유 근데 복잡시렵다. 코드 중복을 제거해봅시다. 훨씬 낫습니다!!!
+
+```tsx
+export const toDoSelector = selector({
+  key: "toDoSelector",
+  get: ({ get }) => {
+    const toDos = get(toDoState);
+    const category = get(categoryState);
+    return toDos.filter((toDo) => toDo.category === category);
+  },
+});
+```
+
+```tsx
+function ToDoList() {
+  const toDos = useRecoilValue(toDoSelector);
+  const [category, setCategory] = useRecoilState(categoryState);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCategory(event.currentTarget.value);
+  };
+  return (
+    <div>
+      <h1>To Dos</h1>
+      <hr />
+      <select onInput={onInput}>
+        <option value="TO_DO">To Do</option>
+        <option value="DOING">Doing</option>
+        <option value="DONE">Done</option>
+      </select>
+      <CreateToDo />
+      {toDos.map((toDo) => (
+        <ToDo key={toDo.id} {...toDo} />
+      ))}
+    </div>
+  );
+}
+
+export default ToDoList;
+```
+
+다음 시간에는 select에서 보고있는 category로 바로 To Do 가 생성되는 기능을 추가해봅시다.
