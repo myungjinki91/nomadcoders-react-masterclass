@@ -2844,3 +2844,74 @@ function ToDo({ text }: IToDo) {
 
 export default ToDo;
 ```
+
+## 6.13 Categories
+
+- 카테고리 기능 만들기
+- 버튼 누르면 카테고리가 변경됨
+
+어떤 버튼을 눌렀는지 onClick이 알 수 있는 방법은~~~ onClick에 인자 전해주기, 혹은 button의 name attribute로 전해주기
+
+편한걸로 하세요~
+
+```tsx
+import { IToDo } from "../atoms";
+
+function ToDo({ text, category }: IToDo) {
+  const onClick = (newCategory: IToDo["category"]) => {
+    console.log(newCategory);
+  };
+  return (
+    <li>
+      <span>{text}</span>
+      {category !== "DOING" && (
+        <button onClick={() => onClick("DOING")}>Doing</button>
+      )}
+      {category !== "TO_DO" && (
+        <button onClick={() => onClick("TO_DO")}>To Do</button>
+      )}
+      {category !== "DONE" && (
+        <button onClick={() => onClick("DONE")}>Done</button>
+      )}
+    </li>
+  );
+}
+
+export default ToDo;
+```
+
+```tsx
+import { useSetRecoilState } from "recoil";
+import { IToDo, toDoState } from "../atoms";
+
+function ToDo({ text, category, id }: IToDo) {
+  const setToDos = useSetRecoilState(toDoState);
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const {
+      currentTarget: { name },
+    } = event;
+  };
+  return (
+    <li>
+      <span>{text}</span>
+      {category !== "DOING" && (
+        <button name="DOING" onClick={onClick}>
+          Doing
+        </button>
+      )}
+      {category !== "TO_DO" && (
+        <button name="TO_DO" onClick={onClick}>
+          To Do
+        </button>
+      )}
+      {category !== "DONE" && (
+        <button name="DONE" onClick={onClick}>
+          Done
+        </button>
+      )}
+    </li>
+  );
+}
+
+export default ToDo;
+```
