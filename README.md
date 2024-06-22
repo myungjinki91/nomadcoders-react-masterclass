@@ -2958,3 +2958,72 @@ const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
   });
 };
 ```
+
+## 6.16 Selectors part One
+
+selector… 슬슬 머리에 과부하가 오지만, 조금 더 해봅시다.
+
+Global State에 배열 값을 담고있는데, 배열의 카테고리가 여러개입니다. 근데 딱히 global state를 더 만들고 싶진 않고 분류는 하고 싶다면 바로 selector를 사용할 때입니다.
+
+```tsx
+export const toDoSelector = selector({
+  key: "toDoSelector",
+  get: ({ get }) => {
+    return "hello";
+  },
+});
+```
+
+근데 아직까진 뭐하는지 잘 모르겠군요. 더 봅시다.
+
+```tsx
+export const toDoSelector = selector({
+  key: "toDoSelector",
+  get: ({ get }) => {
+    const toDos = get(toDoState);
+    return [
+      toDos.filter((toDo) => toDo.category === "TO_DO"),
+      toDos.filter((toDo) => toDo.category === "DOING"),
+      toDos.filter((toDo) => toDo.category === "DONE"),
+    ];
+  },
+});
+```
+
+오호… 2차원 배열로 분리해서 저장하고 있네요?
+
+```tsx
+function ToDoList() {
+  const [toDo, doing, done] = useRecoilValue(toDoSelector);
+  return (
+    <div>
+      <h1>To Dos</h1>
+      <hr />
+      <CreateToDo />
+      <h2>To Do</h2>
+      <ul>
+        {toDo.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+      <h2>Doing</h2>
+      <ul>
+        {doing.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+      <h2>Done</h2>
+      <ul>
+        {done.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+    </div>
+  );
+}
+```
+
+selector의 핵심은 state를 바꾸지 않고 output만 바꾸는 겁니다.
