@@ -59,3 +59,43 @@ Here are some of the best To Do submissions! 모든 수고하셨습니다!:
 - 힌트에서 언급한 방법뿐 아니라, 다양한 방법으로 애니메이션을 구현할 수 있습니다. 여러분들만의 풀이를 만들어보세요! 😊
 - 사라지는 Component에 animation(motion)을 부여하고자 한다면, AnimatePresence를 사용해보세요!
 - [AnimatePresence 공식문서 참고](https://www.framer.com/docs/animate-presence/)
+
+# TA's 정답해설
+
+## TA's Solution #2
+
+- https://codesandbox.io/s/zen-worker-eupoj5?file=/src/App.js
+- 해당 챌린지를 해결하는 솔루션은 여러 가지가 존재합니다. 해설에서 사용하는 방법은 `각 컴포넌트에 id를 부여하는 방식`으로 진행해보겠습니다.
+
+## Circle 컴포넌트의 이동 motion.
+
+- 토글 버튼을 생성해줍니다.
+- Boolean state를 하나 생성해줍니다. 해당 state는 true일 경우, 두 번째 컴포넌트의 Circle을, false일 경우 세 번째 컴포넌트의 Circle을 렌더링해야 합니다.
+- State의 값에 따라 조건적인 렌더링을 위해, 아래와 같이 Box의 컴포넌트 내부에 삼항연산자를 적용해주도록 합시다.
+
+![](https://i.imgur.com/TDYmU4b.png)
+
+## Hover된 컴포넌트의 크기가 커지는 motion.
+
+- 해당 기능을 구현하기 위해 custom 프로퍼티를 사용하여, variants 내부에서 조건에 따라 서로 다른 animation을 적용해보도록 하겠습니다.
+
+![](https://i.imgur.com/uGu3hGf.png)
+
+- 위의 코드에 대해 살펴보겠습니다. 위 코드는 1에서 4의 id가 담겨있는 Array에 map을 사용해 컴포넌트를 렌더링합니다. 이때, 각 컴포넌트는 hover의 motion을 부여하기 위한 hoverVariants(하단 사진 코드)를 가지며, whileHover일 때 variants의 hover상태를 적용해줍니다. Transition은 type은 linear을 적용해주었습니다. 가장 중요한 custom입니다. whileHover 상태일 때, 적용되는 hover은 아래와 같이 조건부로 적용되게 해두었습니다. 따라서 custom의 값이 무엇이냐에 따라 적용되는 animation(motion)에 차이가 발생합니다.
+
+![](https://i.imgur.com/mhOeHQY.png)
+
+- 요컨대 1,2,3,4의 Array에 map을 사용해 렌더링한 각 컴포넌트는 각각 1,2,3,4의 custom 값을 가진 컴포넌트가 됩니다. 따라서 whileHover 상태일 때, 적용되는 hoverVar은 hover될 경우 scale이 1.2가 되며, 1,3번째 박스(왼쪽 박스)일 경우 x로 -25. 2,4번째 박스(오른쪽 박스)일 경우 x로 25 이동합니다. 또한, 1,2번째 박스(위쪽 박스)일 경우 y로 -15. 3,4번째 박스(아래 박스)일 경우 y로 15로 이동하는 코드입니다.
+
+## 선택된 Box 컴포넌트를 중앙으로 이동하며 Overlay가 깔리는 motion.
+
+- 컨셉은 다음과 같습니다. Box를 클릭했을 때, Overlay의 z-index를 최우선순위에 두며, Overlay 컴포넌트 내부에 Box 컴포넌트 하나를 렌더링합니다. 이때, 클릭한 컴포넌트와 Overlay 내부의 Box 컴포넌트가 동일한 Box인 것처럼 보여주기 위해, 두 컴포넌트에 동일한 layoutId를 부여해주어야 합니다.
+- 필자 이를 구현하기 위해 다음과 같은 방법을 사용했습니다. 우선 State를 하나 생성합니다.
+- `const [id, setId] = React.useState(null)`
+- 우리는 Box 컴포넌트를 클릭할 때, setId를 통해 클릭 된 컴포넌트의 id를 새로운 id 값으로 부여할 것입니다. 그리고 아래의 삼항연산자를 통해 Overlay를 렌더링합니다.
+
+![](https://i.imgur.com/GBU7K1o.png)
+
+- Overlay 내부에 선언된 overlayHandler는 한 가지 조건만 만족하면 됩니다. Overlay 컴포넌트를 클릭했을 때, setId라는 modifier를 통해 다시 id를 null 값으로 돌려놓을 것.
+
+![](https://i.imgur.com/tW4oYxH.png)
