@@ -2761,3 +2761,86 @@ const toDoState = atom<IToDo[]>({
   default: [],
 });
 ```
+
+## 6.12 Refactoring
+
+할 일 완료 기능을 추가해봅시다. 그 전에 Component를 분리해봅시다.
+
+```tsx
+import { useRecoilValue } from "recoil";
+import { toDoState } from "../atoms";
+import CreateToDo from "./CreateToDo";
+import ToDo from "./ToDo";
+
+function ToDoList() {
+  const toDos = useRecoilValue(toDoState);
+
+  return (
+    <div>
+      <h1>To Dos</h1>
+      <hr />
+      <CreateToDo />
+      <ul>
+        {toDos.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+export default ToDoList;
+```
+
+```tsx
+import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
+import { toDoState } from "../atoms";
+
+interface IData {
+  toDo: string;
+}
+
+function CreateToDo() {
+  const setToDos = useSetRecoilState(toDoState);
+  const { register, handleSubmit, setValue } = useForm<IData>();
+  const handleValid = ({ toDo }: IData) => {
+    setToDos((oldTodos) => [
+      { text: toDo, id: Date.now(), category: "TO_DO" },
+      ...oldTodos,
+    ]);
+    setValue("toDo", "");
+  };
+  return (
+    <form onSubmit={handleSubmit(handleValid)}>
+      <input
+        {...register("toDo", {
+          required: "Please write a To Do",
+        })}
+        placeholder="Write a to do"
+      />
+      <button>Add</button>
+    </form>
+  );
+}
+
+export default CreateToDo;
+```
+
+분리하면서 버튼도 만들어봅시다.
+
+```tsx
+import { IToDo } from "../atoms";
+
+function ToDo({ text }: IToDo) {
+  return (
+    <li>
+      <span>{text}</span>
+      <button>Doing</button>
+      <button>To Do</button>
+      <button>Done</button>
+    </li>
+  );
+}
+
+export default ToDo;
+```
