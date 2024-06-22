@@ -2915,3 +2915,16 @@ function ToDo({ text, category, id }: IToDo) {
 
 export default ToDo;
 ```
+
+## 6.14 Immutability part One
+
+전에 버튼 누르면 어떤 버튼 눌렀는지 onClick이 이제 알 수 있으니까, Global state인 toTos안에 있는 toDo의 category를 바꿉시다.
+
+```tsx
+setToDos((oldToDos) => {
+  const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
+  const oldToDo = oldToDos[targetIndex];
+  const newToDo = { text, id, category: name };
+  return oldToDos;
+});
+```
