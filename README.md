@@ -3509,3 +3509,45 @@ export const toDoState = atom({
   default: ["a", "b", "c", "d", "e", "f"],
 });
 ```
+
+## 7.6 Reordering part Two
+
+JavaScript의 mutation
+
+[**Why can't I directly modify a component's state, really?**](https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really)
+
+```tsx
+const [toDos, setToDos] = useRecoilState(toDoState);
+const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  setToDos((oldToDos) => {
+    if (!destination) {
+      return oldToDos;
+    }
+    const copyToDos = [...oldToDos];
+    copyToDos.splice(source.index, 1);
+    copyToDos.splice(destination.index, 0, draggableId);
+    return copyToDos;
+  });
+};
+```
+
+DND에서 주의할 점은 `key`와 `draggableId`가 같아야 합니다.
+
+```tsx
+<Board ref={magic.innerRef} {...magic.droppableProps}>
+  {toDos.map((toDo, index) => (
+    <Draggable key={toDo} draggableId={toDo} index={index}>
+      {(magic) => (
+        <Card
+          ref={magic.innerRef}
+          {...magic.draggableProps}
+          {...magic.dragHandleProps}
+        >
+          {toDo}
+        </Card>
+      )}
+    </Draggable>
+  ))}
+  {magic.placeholder}
+</Board>
+```
