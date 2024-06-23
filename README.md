@@ -3163,3 +3163,15 @@ export interface IToDo {
   category: Categories;
 }
 ```
+
+## 6.19 Recap
+
+숙제
+
+- localStorage, recoil-persist
+- Delete
+
+앞으로 추가해 볼 내용
+
+- selector set
+- 마우스 이동
