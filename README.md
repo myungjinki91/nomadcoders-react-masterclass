@@ -3551,3 +3551,50 @@ DND에서 주의할 점은 `key`와 `draggableId`가 같아야 합니다.
   {magic.placeholder}
 </Board>
 ```
+
+## 7.7 Performance
+
+Card를 움직이면 모든 Card를 Rerendering하기 때문에 이걸 해결해봅시다.
+
+React에서는 state가 바뀌면 해당 component가 rerendering됩니다. 그리고 parent component가 rendering되면 child도 rendering됩니다.
+
+React.memo()에 등록한 component는 state가 바뀌지 않으면 절대~~ rendering되지 않습니다.
+
+꼭 필요한 곳에만 사용하세요
+
+```tsx
+import React from "react";
+import { Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
+const Card = styled.div`
+  background-color: ${(props) => props.theme.cardColor};
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+`;
+
+interface IDraggableCardProps {
+  toDo: string;
+  index: number;
+}
+
+function DraggableCard({ toDo, index }: IDraggableCardProps) {
+  console.log("Redering");
+  return (
+    <Draggable draggableId={toDo} index={index}>
+      {(magic) => (
+        <Card
+          ref={magic.innerRef}
+          {...magic.draggableProps}
+          {...magic.dragHandleProps}
+        >
+          {toDo}
+        </Card>
+      )}
+    </Draggable>
+  );
+}
+
+export default React.memo(DraggableCard);
+```
