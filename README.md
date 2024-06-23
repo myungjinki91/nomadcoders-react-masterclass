@@ -3344,3 +3344,75 @@ react-beautiful-dnd 테스트해 보기: https://react-beautiful-dnd.netlify.app
 react-beautiful-dnd 예시 코드: https://codesandbox.io/s/k260nyxq9v
 
 DragDropContext: https://github.com/LeeHyungGeun/react-beautiful-dnd-kr
+
+## 7.3 Drag and Drop part Two
+
+`Droppable`과 `Draggable`의 children으로 `() => {}`를 한 이유는, dnd에서 제공하는 props를 사용하기 위해서였습니다.
+
+조금 복잡한데, 찬찬히 봐봅시다. 아래처럼 작성하면 li를 움직일 수 있습니다.
+
+React 18 StrictMode와 호환이 안되서 지워줍시다.
+
+```tsx
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+function App() {
+  return (
+    <DragDropContext onDragEnd={() => {}}>
+      <div>
+        <Droppable droppableId="one">
+          {(magic) => (
+            <ul ref={magic.innerRef} {...magic.droppableProps}>
+              <Draggable draggableId="first" index={1}>
+                {(magic) => (
+                  <li
+                    ref={magic.innerRef}
+                    {...magic.draggableProps}
+                    {...magic.dragHandleProps}
+                  >
+                    One
+                  </li>
+                )}
+              </Draggable>
+              <Draggable draggableId="second" index={2}>
+                {(magic) => (
+                  <li
+                    ref={magic.innerRef}
+                    {...magic.draggableProps}
+                    {...magic.dragHandleProps}
+                  >
+                    Two
+                  </li>
+                )}
+              </Draggable>
+            </ul>
+          )}
+        </Droppable>
+      </div>
+    </DragDropContext>
+  );
+}
+
+export default App;
+```
+
+특정 부분을 클릭해야만 움직일 수 있도록 바꿀 수도 있습니다.
+
+```tsx
+              <Draggable draggableId="first" index={0}>
+                {(magic) => (
+                  <li ref={magic.innerRef} {...magic.draggableProps}>
+                    <span {...magic.dragHandleProps}>🔥</span>
+                    One
+                  </li>
+                )}
+              </Draggable>
+              <Draggable draggableId="second" index={1}>
+                {(magic) => (
+                  <li ref={magic.innerRef} {...magic.draggableProps}>
+                    <span {...magic.dragHandleProps}>🔥</span>
+                    Two
+                  </li>
+                )}
+              </Draggable>
+```
