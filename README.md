@@ -3416,3 +3416,81 @@ export default App;
                 )}
               </Draggable>
 ```
+
+## 7.4 Styles and Placeholders
+
+이제 CSS를 만져서 좀 그럴듯하게 만들어봅시다.
+
+toDos를 만들고, placeholder를 추가했습니다. placeholder는 draggable을 움직여도 droppable의 height이 변하지 않도록 유지해주는 기능입니다.
+
+```tsx
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { styled } from "styled-components";
+
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const Boards = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  width: 100%;
+`;
+
+const Board = styled.div`
+  padding: 20px 10px;
+  padding-top: 30px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 200px;
+`;
+
+const Card = styled.div`
+  background-color: ${(props) => props.theme.cardColor};
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+`;
+
+const toDos = ["a", "b", "c", "d", "e", "f"];
+
+function App() {
+  const onDragEnd = () => {};
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Wrapper>
+        <Boards>
+          <Droppable droppableId="one">
+            {(magic) => (
+              <Board ref={magic.innerRef} {...magic.droppableProps}>
+                {toDos.map((toDo, index) => (
+                  <Draggable draggableId={toDo} index={index}>
+                    {(magic) => (
+                      <Card
+                        ref={magic.innerRef}
+                        {...magic.draggableProps}
+                        {...magic.dragHandleProps}
+                      >
+                        {toDo}
+                      </Card>
+                    )}
+                  </Draggable>
+                ))}
+                {magic.placeholder}
+              </Board>
+            )}
+          </Droppable>
+        </Boards>
+      </Wrapper>
+    </DragDropContext>
+  );
+}
+
+export default App;
+```
