@@ -3111,3 +3111,55 @@ export default ToDoList;
 ```
 
 다음 시간에는 select에서 보고있는 category로 바로 To Do 가 생성되는 기능을 추가해봅시다.
+
+## 6.18 Enums
+
+select에서 보고있는 category로 바로 To Do 가 생성되는 기능을 추가해봅시다. 별로 어렵지 않습니다. Global state를 가져와서 넣어주기만 하면 됩니다.
+
+```tsx
+  const category = useRecoilValue(categoryState);
+  const { register, handleSubmit, setValue } = useForm<IData>();
+  const handleValid = ({ toDo }: IData) => {
+    setToDos((oldTodos) => [
+      { text: toDo, id: Date.now(), category: category },
+      ...oldTodos,
+    ]);
+```
+
+그런데 IToDo의 category가 Literal인게 맘에 들지 않습니다.
+
+```tsx
+export interface IToDo {
+  text: string;
+  id: number;
+  category: "TO_DO" | "DOING" | "DONE";
+}
+```
+
+type을 만들어줍시다.
+
+```tsx
+type categories = "TO_DO" | "DOING" | "DONE";
+
+export interface IToDo {
+  text: string;
+  id: number;
+  category: categories;
+}
+```
+
+그냥 Enum이 최고입니다. TypeScript에서 지원합니다.
+
+```tsx
+export enum Categories {
+  TO_DO = "To Do",
+  DOING = "Doing",
+  DONE = "Done",
+}
+
+export interface IToDo {
+  text: string;
+  id: number;
+  category: Categories;
+}
+```
