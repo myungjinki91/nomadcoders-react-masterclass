@@ -3224,3 +3224,67 @@ function App() {
 
 export default App;
 ```
+
+## 7.1 Set Selectors
+
+이제 hour에 입력하면 minute이 바뀌도록 하고 싶어요. 자~ 드디어 Recoil selector의 set 들어갑니다.
+
+hours를 변경하면 selector의 set이 minutes atom을 변경하고 그 변경된 minutes를 보고 selector의 get으로 받아서 다시 rendering됩니다.
+
+selector는 여러개의 atom과 상호작용할 수 있습니다.
+
+```tsx
+import { atom, selector } from "recoil";
+
+export const minuteState = atom({
+  key: "minuteState",
+  default: 0,
+});
+
+export const hourSelector = selector<number>({
+  key: "hours",
+  get: ({ get }) => {
+    const minute = get(minuteState);
+    return Math.floor(minute / 60);
+  },
+  set: ({ set }, newValue) => {
+    const minutes = Number(newValue) * 60;
+    set(minuteState, minutes);
+  },
+});
+```
+
+```tsx
+import { useRecoilState } from "recoil";
+import { hourSelector, minuteState } from "./atoms";
+
+function App() {
+  const [minutes, setMinutes] = useRecoilState(minuteState);
+  const [hours, setHours] = useRecoilState(hourSelector);
+  const onMinuteChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setMinutes(+event.currentTarget.value);
+  };
+  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setHours(+event.currentTarget.value);
+  };
+
+  return (
+    <div>
+      <input
+        value={minutes}
+        onChange={onMinuteChange}
+        type="number"
+        placeholder="Minutes"
+      />
+      <input
+        value={hours}
+        onChange={onHoursChange}
+        type="number"
+        placeholder="Hours"
+      />
+    </div>
+  );
+}
+
+export default App;
+```
