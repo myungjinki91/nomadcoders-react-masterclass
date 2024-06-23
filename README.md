@@ -3494,3 +3494,18 @@ function App() {
 
 export default App;
 ```
+
+## 7.5 Reordering
+
+`onDragEnd()`는 Drag가 끝날 때 실행되는 함수입니다.
+
+Global state도 만들어봅시다.
+
+```tsx
+import { atom } from "recoil";
+
+export const toDoState = atom({
+  key: "toDo",
+  default: ["a", "b", "c", "d", "e", "f"],
+});
+```
