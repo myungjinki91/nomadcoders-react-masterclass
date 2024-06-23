@@ -3288,3 +3288,59 @@ function App() {
 
 export default App;
 ```
+
+## 7.2 Drag and Drop part One
+
+react-beautiful-dnd 아주 유명합니다!!!
+
+- <DragDropContext>
+- <Draggable>
+- <Droppable>
+
+일단 모르겠지만 따라해보기!
+
+```tsx
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+function App() {
+  return (
+    <DragDropContext onDragEnd={() => {}}>
+      <div>
+        <Droppable droppableId="one">
+          {() => (
+            <ul>
+              <Draggable draggableId="first" index={1}>
+                {() => <li>One</li>}
+              </Draggable>
+              <Draggable draggableId="first" index={1}>
+                {() => <li>Two</li>}
+              </Draggable>
+            </ul>
+          )}
+        </Droppable>
+      </div>
+    </DragDropContext>
+  );
+}
+
+export default App;
+```
+
+### sugar’s tip
+
+react-beautiful-dnd: React로 list를 만들기 위한 아름답고 접근 가능한 드래그 앤 드롭
+
+https://www.npmjs.com/package/react-beautiful-dnd
+
+https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/about/installation.md
+
+```tsx
+npm i react-beautiful-dnd
+npm i --save-dev @types/react-beautiful-dnd
+```
+
+react-beautiful-dnd 테스트해 보기: https://react-beautiful-dnd.netlify.app/iframe.html?id=board--simple
+
+react-beautiful-dnd 예시 코드: https://codesandbox.io/s/k260nyxq9v
+
+DragDropContext: https://github.com/LeeHyungGeun/react-beautiful-dnd-kr
