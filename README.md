@@ -3175,3 +3175,52 @@ export interface IToDo {
 
 - selector set
 - 마우스 이동
+
+# 7 TRELLO CLONE
+
+## 7.0 Get Selectors
+
+이전 것 지우고 새로 만들어봅시다. minute에 입력하면 hour가 바뀌는 프로그램입니다.
+
+```tsx
+import { atom, selector } from "recoil";
+
+export const minuteState = atom({
+  key: "minuteState",
+  default: 0,
+});
+
+export const hourSelector = selector({
+  key: "hours",
+  get: ({ get }) => {
+    const minute = get(minuteState);
+    return Math.floor(minute / 60);
+  },
+});
+```
+
+```tsx
+import { useRecoilState, useRecoilValue } from "recoil";
+import { hourSelector, minuteState } from "./atoms";
+
+function App() {
+  const [minute, setMinute] = useRecoilState(minuteState);
+  const hour = useRecoilValue(hourSelector);
+  const onMinuteChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setMinute(+event.currentTarget.value);
+  };
+  return (
+    <div>
+      <input
+        value={minute}
+        onChange={onMinuteChange}
+        type="number"
+        placeholder="Minutes"
+      />
+      <input value={hour} type="number" placeholder="Hours" />
+    </div>
+  );
+}
+
+export default App;
+```
