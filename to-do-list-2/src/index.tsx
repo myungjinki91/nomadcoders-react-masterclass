@@ -1,5 +1,9 @@
-import { createGlobalStyle, css } from "styled-components";
-import ToDoList from "./components/ToDoList";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { RecoilRoot } from "recoil";
+import { ThemeProvider, createGlobalStyle, css } from "styled-components";
+import { darkTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`${css`
   html,
@@ -151,13 +155,16 @@ const GlobalStyle = createGlobalStyle`${css`
 `}
 `;
 
-function App() {
-  return (
-    <>
-      <GlobalStyle />
-      <ToDoList />
-    </>
-  );
-}
-
-export default App;
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <RecoilRoot>
+      <ThemeProvider theme={darkTheme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </RecoilRoot>
+  </React.StrictMode>
+);
