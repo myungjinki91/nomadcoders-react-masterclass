@@ -924,6 +924,41 @@ const router = createBrowserRouter([
 export default router;
 ```
 
+## 4.4 useNavigate
+
+v5에서는 location.push였는데 useNavigate를 쓰면 클릭 없이 유저를 다른 곳으로 보낼 수 있습니다.
+
+언제 사용하나요?
+
+1. redirect
+2. 유저가 접근권한 없을 때
+
+```tsx
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+function Header() {
+  const navigate = useNavigate();
+  const onAboutClick = () => {
+    navigate("/about");
+  };
+  return (
+    <header>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <button onClick={onAboutClick}>About</button>
+        </li>
+      </ul>
+    </header>
+  );
+}
+
+export default Header;
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup
