@@ -1110,6 +1110,50 @@ function User() {
 export default User;
 ```
 
+## 4.7 useOutletContext
+
+outlet으로 데이터를 보내는 방법
+
+https://reactrouter.com/en/main/hooks/use-outlet-context
+
+다크모드도 가능!!!
+
+```tsx
+import { Link, Outlet, useParams } from "react-router-dom";
+import { users } from "../../dbs";
+
+function User() {
+  const { userId } = useParams();
+  return (
+    <div>
+      <h1>
+        User with id {userId} is named: {users[Number(userId) - 1].name}
+      </h1>
+      <hr />
+      <Link to="followers">See followers</Link>
+      <Outlet context={{ nameOfMyUser: users[Number(userId) - 1].name }} />
+    </div>
+  );
+}
+
+export default User;
+```
+
+```tsx
+import { useOutletContext } from "react-router-dom";
+
+interface IFollowersContext {
+  nameOfMyUser: string;
+}
+
+function Followers() {
+  const { nameOfMyUser } = useOutletContext<IFollowersContext>();
+  return <h1>here are my {nameOfMyUser}의 followers</h1>;
+}
+
+export default Followers;
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup
