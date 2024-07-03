@@ -834,6 +834,66 @@ function Header() {
 export default Header;
 ```
 
+## 4.2 createBrowserRouter
+
+브라우저를 조금 더 선언적으로 바꾸어줍니다. JSX를 사용하지 않구요.
+
+- createBrowserRouter
+- <RouterProvider>
+- <Outlet>
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import Router from "./Router";
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={Router} />
+  </React.StrictMode>
+);
+```
+
+```tsx
+import { createBrowserRouter } from "react-router-dom";
+import Root from "./Root";
+import Home from "./screens/Home";
+import About from "./screens/About";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      { path: "", element: <Home /> },
+      { path: "about", element: <About /> },
+    ],
+  },
+]);
+
+export default router;
+```
+
+```tsx
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
+
+function Root() {
+  return (
+    <div>
+      <Header />
+      <Outlet />
+    </div>
+  );
+}
+
+export default Root;
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup
