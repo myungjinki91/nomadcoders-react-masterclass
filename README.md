@@ -894,6 +894,36 @@ function Root() {
 export default Root;
 ```
 
+## 4.3 errorElement
+
+1. root의 children path가 올바르지 않거나
+2. 올바르더라도 에러가 발생하는 경우.
+
+에러가 넘처 흐르는 걸 방지할 수 있습니다.
+
+```tsx
+import { createBrowserRouter } from "react-router-dom";
+import Root from "./Root";
+import Home from "./screens/Home";
+import About from "./screens/About";
+import NotFound from "./screens/NotFound";
+import ErrorComponent from "./components/ErrorComponent";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      { path: "", element: <Home />, errorElement: <ErrorComponent /> },
+      { path: "about", element: <About />, errorElement: <ErrorComponent /> },
+    ],
+    errorElement: <NotFound />,
+  },
+]);
+
+export default router;
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup
