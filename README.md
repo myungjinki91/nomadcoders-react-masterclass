@@ -959,6 +959,93 @@ function Header() {
 export default Header;
 ```
 
+## 4.5 useParams
+
+/users/:userId를 만듭시다. /users/ 는 없습니다.
+
+URL을 보고 / 렌더링 /users 렌더링, :userId를 보고 렌더링
+
+```tsx
+import { createBrowserRouter } from "react-router-dom";
+import Root from "./Root";
+import Home from "./screens/Home";
+import About from "./screens/About";
+import NotFound from "./screens/NotFound";
+import ErrorComponent from "./components/ErrorComponent";
+import User from "./screens/users/User";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      { path: "", element: <Home />, errorElement: <ErrorComponent /> },
+      { path: "about", element: <About />, errorElement: <ErrorComponent /> },
+      {
+        path: "users/:userId",
+        element: <User />,
+        errorElement: <ErrorComponent />,
+      },
+    ],
+    errorElement: <NotFound />,
+  },
+]);
+
+export default router;
+```
+
+```tsx
+import { Link } from "react-router-dom";
+import { users } from "../dbs";
+
+function Home() {
+  return (
+    <div>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            <Link to={`/users/${user.id}`}>{user.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default Home;
+```
+
+```tsx
+import { useParams } from "react-router-dom";
+import { users } from "../../dbs";
+
+function User() {
+  const { userId } = useParams();
+  return (
+    <div>
+      <h1>
+        User with id {userId} is named: {users[Number(userId) - 1].name}
+      </h1>
+    </div>
+  );
+}
+
+export default User;
+```
+
+```tsx
+export const users = [
+  {
+    id: 1,
+    name: "nico",
+  },
+  {
+    id: 2,
+    name: "lynn",
+  },
+];
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup
