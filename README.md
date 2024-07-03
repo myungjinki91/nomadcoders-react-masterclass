@@ -1046,6 +1046,70 @@ export const users = [
 ];
 ```
 
+## 4.6 Outlet
+
+children이 있으면 outlet이 사용됩니다.
+
+outlet은 children을 rendering합니다.
+
+절대경로 상대경로
+
+<Link to=”/followers”>
+
+<Link to=”followers”>
+
+```tsx
+import { createBrowserRouter } from "react-router-dom";
+import Root from "./Root";
+import Home from "./screens/Home";
+import About from "./screens/About";
+import NotFound from "./screens/NotFound";
+import ErrorComponent from "./components/ErrorComponent";
+import User from "./screens/users/User";
+import Followers from "./screens/users/Followers";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      { path: "", element: <Home />, errorElement: <ErrorComponent /> },
+      { path: "about", element: <About />, errorElement: <ErrorComponent /> },
+      {
+        path: "users/:userId",
+        element: <User />,
+        children: [{ path: "followers", element: <Followers /> }],
+        errorElement: <ErrorComponent />,
+      },
+    ],
+    errorElement: <NotFound />,
+  },
+]);
+
+export default router;
+```
+
+```tsx
+import { Link, Outlet, useParams } from "react-router-dom";
+import { users } from "../../dbs";
+
+function User() {
+  const { userId } = useParams();
+  return (
+    <div>
+      <h1>
+        User with id {userId} is named: {users[Number(userId) - 1].name}
+      </h1>
+      <hr />
+      <Link to="followers">See followers</Link>
+      <Outlet />
+    </div>
+  );
+}
+
+export default User;
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup

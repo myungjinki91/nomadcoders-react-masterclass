@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import { users } from "../../dbs";
 
 function User() {
@@ -8,6 +8,9 @@ function User() {
       <h1>
         User with id {userId} is named: {users[Number(userId) - 1].name}
       </h1>
+      <hr />
+      <Link to="followers">See followers</Link>
+      <Outlet />
     </div>
   );
 }
