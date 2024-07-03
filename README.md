@@ -775,6 +775,65 @@ npm i react-router-dom@5.4.3
 
 강의를 끝까지 들은 후 다시 돌아와주세요.
 
+## 4.1 BrowserRouter
+
+```bash
+npx create-react-app --typescript
+npm i react-router-dom@6.4
+```
+
+```tsx
+import Router from "./Router";
+
+function App() {
+  return <Router />;
+}
+
+export default App;
+```
+
+```tsx
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./screens/Home";
+import About from "./screens/About";
+import Header from "./components/Header";
+
+function Router() {
+  return (
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default Router;
+```
+
+```tsx
+import { Link } from "react-router-dom";
+
+function Header() {
+  return (
+    <header>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+      </ul>
+    </header>
+  );
+}
+
+export default Header;
+```
+
 # 5 CRYPTO TRACKER
 
 ## 5.0 Setup
