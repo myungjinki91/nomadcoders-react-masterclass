@@ -5042,3 +5042,15 @@ function Board({ toDos, boardId }: IBoardProps) {
     });
   };
 ```
+
+## 8.0 Introduction
+
+Framer Motion
+
+React용 production-ready 모션 라이브러리 (오픈 소스)
+
+https://www.framer.com/motion
+
+https://github.com/framer/motion
+
+npx create-react-app my-app --template typescript
