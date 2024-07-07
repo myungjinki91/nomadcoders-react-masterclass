@@ -4971,3 +4971,74 @@ function DraggableCard({ toDoId, toDoText, index }: IDraggableCardProps) {
 
 export default React.memo(DraggableCard);
 ```
+
+## 7.15 Creating Tasks
+
+{id:1,text:"hi"}, {id:2,text:"hello"}
+
+Uncaught Error: Objects are not valid as a React child (found: object with keys {id, text}). If you meant to render a collection of children, use an array instead.
+
+DroppableBoard(Board)에서 DraggableCard(Card)로 props를 전달할 때 todo 객체를 통채로 보내면 위와 같은 에러가 발생할 수 있으므로 객체에서 값을 꺼내서 따로따로 보내야 합니다.
+
+todo={todo} (X)
+
+todoId={todo.id} todoText={todo.text} (O)
+
+- src/App.tsx
+
+```tsx
+function App() {
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = (info: DropResult) => {
+    const { destination, draggableId, source } = info;
+    if (!destination) return;
+    if (destination?.droppableId === source.droppableId) {
+      // same board movement.
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
+    if (destination.droppableId !== source.droppableId) {
+      // cross board movement
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
+        const destinationBoard = [...allBoards[destination.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination?.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
+        };
+      });
+    }
+  };
+```
+
+- src/Components/Board.tsx
+
+```tsx
+function Board({ toDos, boardId }: IBoardProps) {
+  const setToDos = useSetRecoilState(toDoState);
+  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const onValid = ({ toDo }: IForm) => {
+    const newToDo = {
+      id: Date.now(),
+      text: toDo,
+    };
+    setToDos((allBoards) => {
+      return {
+        ...allBoards,
+        [boardId]: [newToDo, ...allBoards[boardId]],
+      };
+    });
+  };
+```
