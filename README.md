@@ -3977,3 +3977,167 @@ function DraggableCard({ toDo, index }: IDraggableCardProps) {
 
 export default React.memo(DraggableCard);
 ```
+
+## 7.8 Multi Boards
+
+- src/atoms.tsx
+
+```tsx
+import { atom } from "recoil";
+
+interface IToDoState {
+  [key: string]: string[];
+}
+
+export const toDoState = atom<IToDoState>({
+  key: "toDo",
+  default: {
+    to_do: ["a", "b"],
+    doing: ["c", "d", "e"],
+    done: ["f"],
+  },
+});
+```
+
+- App.tsx
+
+```tsx
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
+import { toDoState } from "./atoms";
+import Board from "./Components/Board";
+
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+const Boards = styled.div`
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+`;
+
+function App() {
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    /* setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      toDosCopy.splice(source.index, 1);
+      toDosCopy.splice(destination?.index, 0, draggableId);
+      return toDosCopy;
+    }); */
+  };
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Wrapper>
+        <Boards>
+          {Object.keys(toDos).map((boardId) => (
+            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+          ))}
+        </Boards>
+      </Wrapper>
+    </DragDropContext>
+  );
+}
+
+export default App;
+```
+
+- src/Components/Board.tsx
+
+```tsx
+import { Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import DragabbleCard from "./DraggableCard";
+
+const Wrapper = styled.div`
+  padding: 20px 10px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 200px;
+`;
+
+interface IBoardProps {
+  toDos: string[];
+  boardId: string;
+}
+
+function Board({ toDos, boardId }: IBoardProps) {
+  return (
+    <Droppable droppableId={boardId}>
+      {(magic) => (
+        <Wrapper ref={magic.innerRef} {...magic.droppableProps}>
+          {toDos.map((toDo, index) => (
+            <DragabbleCard key={toDo} index={index} toDo={toDo} />
+          ))}
+          {magic.placeholder}
+        </Wrapper>
+      )}
+    </Droppable>
+  );
+}
+export default Board;
+```
+
+- src/Components/DraggableCard.tsx
+
+```tsx
+import React from "react";
+import { Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
+const Card = styled.div`
+  background-color: ${(props) => props.theme.cardColor};
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+`;
+
+interface IDraggableCardProps {
+  toDo: string;
+  index: number;
+}
+
+function DraggableCard({ toDo, index }: IDraggableCardProps) {
+  return (
+    <Draggable draggableId={toDo} index={index}>
+      {(magic) => (
+        <Card
+          ref={magic.innerRef}
+          {...magic.draggableProps}
+          {...magic.dragHandleProps}
+        >
+          {toDo}
+        </Card>
+      )}
+    </Draggable>
+  );
+}
+
+export default React.memo(DraggableCard);
+```
+
+Object.keys(obj)
+
+Object.keys() 메소드는 주어진 객체의 속성 이름들을 일반적인 반복문과 동일한 순서로 순회되는 열거할 수 있는 배열로 반환합니다.
+
+ex) Object.keys(obj).map((item)=>obj[item])
+
+```tsx
+const object1 = {
+  a: "somestring",
+  b: 42,
+  c: false,
+};
+console.log(Object.keys(object1)); // Array ["a", "b", "c"]
+```
+
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
