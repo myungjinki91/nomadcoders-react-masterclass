@@ -5054,3 +5054,11 @@ https://www.framer.com/motion
 https://github.com/framer/motion
 
 npx create-react-app my-app --template typescript
+
+## 8.1 Installation
+
+```bash
+npm i framer-motion
+```
+
+만약 문제있으면 craco사용
