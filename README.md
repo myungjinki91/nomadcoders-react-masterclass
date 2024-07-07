@@ -4141,3 +4141,144 @@ console.log(Object.keys(object1)); // Array ["a", "b", "c"]
 ```
 
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+
+## 7.9 Same Board Movement
+
+마지막에 setTodos 함수에 인자로 디스트럭쳐링으로 oldTodos를 넣고 바뀐 board 프로퍼티를 더 넣어주면, 객체 안에서 키 값이 중복된 프로퍼티는 마지막에 선언된 프로퍼티를 사용하기때문에 저렇게 넣어줘도 상관없는것이다.
+
+DropResult
+
+draggableId: 드래그 되었던 Draggable의 id
+
+type: 드래그 되었던 Draggable의 type
+
+source: Draggable이 시작된 위치
+
+destination: Draggable이 끝난 위치
+
+- src/atoms.tsx
+
+```tsx
+import { atom } from "recoil";
+
+interface IToDoState {
+  [key: string]: string[];
+}
+
+export const toDoState = atom<IToDoState>({
+  key: "toDo",
+  default: {
+    "To Do": ["a", "b"],
+    Doing: ["c", "d", "e"],
+    Done: ["f"],
+  },
+});
+```
+
+- src/App.tsx
+
+```tsx
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
+import { toDoState } from "./atoms";
+import Board from "./Components/Board";
+
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+const Boards = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  gap: 10px;
+`;
+
+function App() {
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = (info: DropResult) => {
+    console.log(info);
+    const { destination, draggableId, source } = info;
+    if (destination?.droppableId === source.droppableId) {
+      // same board movement.
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, draggableId);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
+  };
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Wrapper>
+        <Boards>
+          {Object.keys(toDos).map((boardId) => (
+            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+          ))}
+        </Boards>
+      </Wrapper>
+    </DragDropContext>
+  );
+}
+
+export default App;
+```
+
+- src/Components/Board.tsx
+
+```tsx
+import { Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import DragabbleCard from "./DraggableCard";
+
+const Wrapper = styled.div`
+  width: 300px;
+  padding: 20px 10px;
+  padding-top: 10px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 300px;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 18px;
+`;
+
+interface IBoardProps {
+  toDos: string[];
+  boardId: string;
+}
+
+function Board({ toDos, boardId }: IBoardProps) {
+  return (
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Droppable droppableId={boardId}>
+        {(magic) => (
+          <div ref={magic.innerRef} {...magic.droppableProps}>
+            {toDos.map((toDo, index) => (
+              <DragabbleCard key={toDo} index={index} toDo={toDo} />
+            ))}
+            {magic.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </Wrapper>
+  );
+}
+export default Board;
+```
