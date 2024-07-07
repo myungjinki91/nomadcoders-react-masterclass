@@ -4825,3 +4825,149 @@ function Board({ toDos, boardId }: IBoardProps) {
   );
 }
 ```
+
+## 7.14 Task Objects
+
+React Hook Form
+
+```bash
+npm install react-hook-form
+```
+
+```tsx
+const { register, handleSubmit, setValue, getValues } = useForm<FormData>({
+  mode: "onChange",
+  defaultValues: { text: "" },
+});
+```
+
+https://react-hook-form.com/
+
+- src/atoms.tsx
+
+```tsx
+import { atom } from "recoil";
+
+export interface ITodo {
+  id: number;
+  text: string;
+}
+
+interface IToDoState {
+  [key: string]: ITodo[];
+}
+
+export const toDoState = atom<IToDoState>({
+  key: "toDo",
+  default: {
+    "To Do": [],
+    Doing: [],
+    Done: [],
+  },
+});
+```
+
+- src/Components/Board.tsx
+
+```
+
+const Form = styled.form`
+  width: 100%;
+  input {
+    width: 100%;
+  }
+`;
+
+interface IBoardProps {
+  toDos: ITodo[];
+  boardId: string;
+}
+
+interface IForm {
+  toDo: string;
+}
+
+function Board({ toDos, boardId }: IBoardProps) {
+  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const onValid = ({ toDo }: IForm) => {
+    setValue("toDo", "");
+  };
+  return (
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Form onSubmit={handleSubmit(onValid)}>
+        <input
+          {...register("toDo", { required: true })}
+          type="text"
+          placeholder={`Add task on ${boardId}`}
+        />
+      </Form>
+      <Droppable droppableId={boardId}>
+        {(magic, info) => (
+          <Area
+            isDraggingOver={info.isDraggingOver}
+            isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+            ref={magic.innerRef}
+            {...magic.droppableProps}
+          >
+            {toDos.map((toDo, index) => (
+              <DragabbleCard
+                key={toDo.id}
+                index={index}
+                toDoId={toDo.id}
+                toDoText={toDo.text}
+              />
+            ))}
+            {magic.placeholder}
+          </Area>
+        )}
+      </Droppable>
+    </Wrapper>
+  );
+}
+export default Board;
+
+```
+
+- src/DraggableCard.tsx
+
+```tsx
+import React from "react";
+import { Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
+const Card = styled.div<{ isDragging: boolean }>`
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: ${(props) =>
+    props.isDragging ? "#e4f2ff" : props.theme.cardColor};
+  box-shadow: ${(props) =>
+    props.isDragging ? "0px 2px 5px rgba(0, 0, 0, 0.05)" : "none"};
+`;
+
+interface IDraggableCardProps {
+  toDoId: number;
+  toDoText: string;
+  index: number;
+}
+
+function DraggableCard({ toDoId, toDoText, index }: IDraggableCardProps) {
+  return (
+    <Draggable draggableId={toDoId + ""} index={index}>
+      {(magic, snapshot) => (
+        <Card
+          isDragging={snapshot.isDragging}
+          ref={magic.innerRef}
+          {...magic.draggableProps}
+          {...magic.dragHandleProps}
+        >
+          {toDoText}
+        </Card>
+      )}
+    </Draggable>
+  );
+}
+
+export default React.memo(DraggableCard);
+```
