@@ -4634,3 +4634,131 @@ function Board({ toDos, boardId }: IBoardProps) {
 }
 export default Board;
 ```
+
+## 7.12 Final Styles
+
+Draggablestate snapshot
+
+isDragging: boolean
+
+Draggable이 활발하게 드래그 중이거나 드롭 애니메이션인 경우 true로 설정합니다.
+
+https://github.com/atlassian/react-beautiful-dnd/blob/HEAD/docs/api/draggable.md#2-snapshot-draggablestatesnapshot
+
+Flatuicolors
+
+https://flatuicolors.com/palette/us
+
+- src/Components/Board.tsx
+
+```tsx
+import { Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import DragabbleCard from "./DraggableCard";
+
+const Wrapper = styled.div`
+  width: 300px;
+  padding-top: 10px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 18px;
+`;
+
+interface IAreaProps {
+  isDraggingFromThis: boolean;
+  isDraggingOver: boolean;
+}
+
+const Area = styled.div<IAreaProps>`
+  background-color: ${(props) =>
+    props.isDraggingOver
+      ? "#dfe6e9"
+      : props.isDraggingFromThis
+      ? "#b2bec3"
+      : "transparent"};
+  flex-grow: 1;
+  transition: background-color 0.3s ease-in-out;
+  padding: 20px;
+`;
+
+interface IBoardProps {
+  toDos: string[];
+  boardId: string;
+}
+
+function Board({ toDos, boardId }: IBoardProps) {
+  return (
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Droppable droppableId={boardId}>
+        {(magic, info) => (
+          <Area
+            isDraggingOver={info.isDraggingOver}
+            isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+            ref={magic.innerRef}
+            {...magic.droppableProps}
+          >
+            {toDos.map((toDo, index) => (
+              <DragabbleCard key={toDo} index={index} toDo={toDo} />
+            ))}
+            {magic.placeholder}
+          </Area>
+        )}
+      </Droppable>
+    </Wrapper>
+  );
+}
+export default Board;
+```
+
+- src/Components/DraggableCard.tsx
+
+```tsx
+import React from "react";
+import { Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
+const Card = styled.div<{ isDragging: boolean }>`
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: ${(props) =>
+    props.isDragging ? "#e4f2ff" : props.theme.cardColor};
+  box-shadow: ${(props) =>
+    props.isDragging ? "0px 2px 5px rgba(0, 0, 0, 0.05)" : "none"};
+`;
+
+interface IDraggableCardProps {
+  toDo: string;
+  index: number;
+}
+
+function DraggableCard({ toDo, index }: IDraggableCardProps) {
+  return (
+    <Draggable draggableId={toDo} index={index}>
+      {(magic, snapshot) => (
+        <Card
+          isDragging={snapshot.isDragging}
+          ref={magic.innerRef}
+          {...magic.draggableProps}
+          {...magic.dragHandleProps}
+        >
+          {toDo}
+        </Card>
+      )}
+    </Draggable>
+  );
+}
+
+export default React.memo(DraggableCard);
+```
