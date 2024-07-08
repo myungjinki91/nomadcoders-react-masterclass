@@ -5125,3 +5125,48 @@ function App() {
 
 export default App;
 ```
+
+## 8.3 Variants part One
+
+stage???
+
+Variant
+
+```tsx
+const myVars = {
+  start: {
+    scale: 0,
+  },
+  end: {
+    scale: 1,
+    rotateZ: 360,
+    transition: {
+      type: "spring",
+      delay: 0.5,
+    },
+  },
+};
+
+function App() {
+  return (
+    <Wrapper>
+      <Box variants={myVars} initial="start" animate="end" />
+    </Wrapper>
+  );
+}
+```
+
+Variants
+
+Variants은 컴포넌트가 가질 수 있는 미리 정의된 시각적 state입니다.
+
+```jsx
+const variants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+}
+
+motion.div initial="hidden" animate="visible" variants={variants}
+```
+
+https://www.framer.com/docs/introduction/##variants
