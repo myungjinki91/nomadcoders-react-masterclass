@@ -5170,3 +5170,57 @@ motion.div initial="hidden" animate="visible" variants={variants}
 ```
 
 https://www.framer.com/docs/introduction/##variants
+
+## 8.4 Variants part Two
+
+You can apply types in this way (auto complete available)
+
+```jsx
+import { motion, Variants } from "framer-motion";
+
+const variants: Variants = {
+  start: {},
+  end: {},
+};
+```
+
+Orchestration
+
+delayChildren: 딜레이 시간(초) 후에 하위 애니메이션이 시작됩니다.
+
+staggerChildren: 하위 컴포넌트의 애니메이션에 지속 시간(초)만큼 시차를 둘 수 있습니다. 예를 들어, staggerChildren이 0.01이면 첫 번째 자식은 0초, 두 번째 자식은 0.01초, 세 번째 자식은 0.02초 지연되는 식입니다. 계산된 stagger 딜레이가 delayChildren에 추가됩니다.
+
+https://www.framer.com/docs/transition/#orchestration
+
+inherit: boolean
+
+부모로부터 variant 변경 사항을 상속하지 않도록 하려면 false로 설정합니다.
+
+custom: any
+
+각 애니메이션 컴포넌트에 대해 dynamic variants을 다르게 사용할 사용자 지정 데이터입니다.
+
+```jsx
+const variants = {
+  visible: (custom) => ({
+    opacity: 1,
+    transition: { delay: custom * 0.2 }
+  })
+}
+
+<motion.div inherit={false} custom={0} animate="visible" variants={variants} />
+<motion.div custom={1} animate="visible" variants={variants} />
+<motion.div custom={2} animate="visible" variants={variants} />
+```
+
+https://www.framer.com/docs/component/###inherit
+
+place-items (Container Properties)
+
+justify-items과 align-items를 합친 축약형
+
+place-self (Item Properties)
+
+justify-self와 align-self를 합친 축약형f
+
+부모 컴포넌트가 자식 컴포넌트의 animation을 제어할 수 있고 관련된 시간을 계산하지 않아도 되다니... AWESOME😮
