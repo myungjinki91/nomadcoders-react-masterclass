@@ -5224,3 +5224,58 @@ place-self (Item Properties)
 justify-self와 align-self를 합친 축약형f
 
 부모 컴포넌트가 자식 컴포넌트의 animation을 제어할 수 있고 관련된 시간을 계산하지 않아도 되다니... AWESOME😮
+
+## 8.5 Gestures part One
+
+- whileHover
+- whileTap
+- whileDrag
+
+color를 값으로 줘야 transition이 적용됩니다~~
+
+- Hover
+
+hover 제스처는 포인터가 컴포넌트 위로 이동하거나 컴포넌트를 떠날 때를 감지합니다. onMouseEnter 및 onMouseLeave와는 달리 실제 마우스 이벤트의 결과로만 호버가 실행되도록 보장됩니다.
+
+whileHover: VariantLabels | TargetAndTransition
+
+호버 제스처가 인식되는 동안 애니메이션할 속성 또는 변형 레이블입니다.
+
+```tsx
+<motion.div whileHover={{ scale: 0.8 }} />
+// https://www.framer.com/docs/gestures/#hover
+```
+
+- Tap
+
+whileTap: VariantLabels | TargetAndTransition
+
+컴포넌트를 누르고 있는 동안 애니메이션할 속성 또는 변형 레이블입니다.
+
+```tsx
+<motion.div whileTap={{ scale: 0.8 }} />
+```
+
+https://www.framer.com/docs/gestures/#tap
+
+- Drag
+
+drag: boolean | "x" | "y"
+
+이 요소에 대해 끌기를 활성화합니다. 기본적으로 false로 설정됩니다. 양방향으로 드래그하려면 true로 설정하십시오. 특정 방향으로만 드래그하려면 "x" 또는 "y"를 설정합니다.
+
+```tsx
+<motion.div drag="x" />
+```
+
+whileDrag: VariantLabels | TargetAndTransition
+
+드래그 제스처가 인식되는 동안 애니메이션할 속성 또는 변형 레이블입니다.
+
+```tsx
+<motion.div whileDrag={{ scale: 1.2 }} />
+```
+
+https://www.framer.com/docs/gestures/#drag
+
+rgb(46, 204, 113)
