@@ -5976,3 +5976,101 @@ AnimateSharedLayout은 동일한 layoutId prop을 가진 모션 컴포넌트들 
 ex) isSelected && < motion.div layoutId="underline" />
 
 https://www.framer.com/docs/animate-shared-layout/#animate-between-components
+
+## 8.15 Final Project part One
+
+이번에 할 것
+
+인상적인 내용
+
+- layoutId 는 신이다
+- grid복습!
+  - span 2는 개수 모드로 변환
+  - 어디부터 / 어디까지
+
+코드
+
+```tsx
+import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+
+const Wrapper = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 50vw;
+  gap: 10px;
+  div:first-child,
+  div:last-child {
+    grid-column: span 2;
+  }
+`;
+
+const Box = styled(motion.div)`
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 40px;
+  height: 200px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const Overlay = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const overlay = {
+  hidden: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  visible: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+  exit: { backgroundColor: "rgba(0, 0, 0, 0)" },
+};
+
+function App() {
+  const [id, setId] = useState<null | string>(null);
+  return (
+    <Wrapper>
+      <Grid>
+        {["1", "2", "3", "4"].map((n) => (
+          <Box onClick={() => setId(n)} key={n} layoutId={n} />
+        ))}
+      </Grid>
+      <AnimatePresence>
+        {id ? (
+          <Overlay
+            variants={overlay}
+            onClick={() => setId(null)}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <Box layoutId={id} style={{ width: 400, height: 200 }} />
+          </Overlay>
+        ) : null}
+      </AnimatePresence>
+    </Wrapper>
+  );
+}
+
+export default App;
+```
+
+팁
+
+https://www.framer.com/motion/layout-animations/
+
+처음에는 상자들마다 어떻게 animation을 줄지 고민했었는데
+
+SharedLayout을 사용하면 처음과 끝에 컴포넌트의 배치를 해서 동일한 layoutId를 주면 되는군요
+
+animation의 전체 로직을 구상하지 않고 처음 모습과 끝 모습만 주면 알아서 부여해주다니... 엄청 amazing하군요ㄷㄷ
