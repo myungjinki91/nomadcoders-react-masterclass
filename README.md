@@ -6074,3 +6074,9 @@ https://www.framer.com/motion/layout-animations/
 SharedLayout을 사용하면 처음과 끝에 컴포넌트의 배치를 해서 동일한 layoutId를 주면 되는군요
 
 animation의 전체 로직을 구상하지 않고 처음 모습과 끝 모습만 주면 알아서 부여해주다니... 엄청 amazing하군요ㄷㄷ
+
+## 8.16 Final Project part Two
+
+이번에 할 것
+
+- 버튼 모두에서 동작하도록 변경
