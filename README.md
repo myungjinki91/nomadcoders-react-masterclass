@@ -5497,3 +5497,51 @@ function App() {
 
 export default App;
 ```
+
+## 8.10 SVG Animation
+
+fill만 조금 늦게 할 수 도 있습니다!
+
+```tsx
+        <motion.path
+          variants={svg}
+          initial="start"
+          animate="end"
+          transition={{
+            default: { duration: 5 },
+            fill: { duration: 1, delay: 3 },
+          }}
+         >
+```
+
+Fontawesome Airbnb Logo
+
+< />모양 클릭해서 svg복사 후 사용하시면 됩니다.
+
+https://fontawesome.com/v5.15/icons/airbnb?style=brandsf
+
+Line drawing
+
+svg 엘리먼트에 'pathLength', 'pathSpacing', 'pathOffset' 속성을 사용하여 Line drawing 애니메이션을 만들 수 있습니다.
+
+https://www.framer.com/docs/examples/#line-drawing
+
+path (SVG)
+
+path SVG 엘리먼트는 모양을 정의하는 일반 엘리먼트입니다.모든 기본 모양은 path 엘리먼트로 만들 수 있습니다.
+
+path의 속성 d는 경로의 모양을 정의합니다.
+
+https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
+
+Path
+
+motion.path 컴포넌트는 세 가지 강력한 SVG path 속성인 pathLength, pathSpacing 및 pathOffset을 가지고 있습니다. 수동 경로 측정이 필요 없이 모두 0과 1 사이의 값으로 설정됩니다.
+
+Line drawing
+
+선 그리기 애니메이션은 pathLength, pathSpacing 및 pathOffset의 세 가지 특수 속성을 사용하여 많은 SVG 요소로 만들 수 있습니다.
+
+ex) motion.circle initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+
+https://www.framer.com/docs/examples/#line-drawing
