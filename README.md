@@ -7377,3 +7377,61 @@ backdrop_path가 존재하지 않는 이미지는 movie.backdrop_path || movie.p
 인상적인 내용
 
 - Box의 whileHover가 children에게 상속됨
+
+## 9.11 Movie Modal
+
+이번에 할 것
+
+- React로 Modal만들기!!!
+- Box클릭하면 모달 생성
+
+인상적인 내용
+
+```
+<Route path={["/", "/movies/:movieId"]}>
+```
+
+```tsx
+const history = useHistory();
+const bigMovieMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+
+const onBoxClicked = (movieId: number) => {
+  history.push(`/movies/${movieId}`);
+};
+```
+
+코드
+
+팁
+
+React Router 5=>6 버전에서 변경된 점
+
+1. useHistory() => useNavigate()
+
+```tsx
+// Home.tsx
+
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
+
+navigate(`/movies/${movieId}`);
+
+// App.tsx
+
+<Route path="/" element={<Home />}>
+  <Route path="movies/:id" element={<Home />} />
+</Route>;
+```
+
+https://reactrouter.com/docs/en/v6/upgrading/v5#use-usenavigate-instead-of-usehistory
+
+2. useRouteMatch() => useMatch()
+
+```tsx
+import { useMatch, PathMatch } from "react-router-dom";
+
+const moviePathMatch: PathMatch<string> | null = useMatch("/movies/:id");
+```
+
+https://reactrouter.com/docs/en/v6/upgrading/v5#replace-useroutematch-with-usematch
