@@ -7435,3 +7435,12 @@ const moviePathMatch: PathMatch<string> | null = useMatch("/movies/:id");
 ```
 
 https://reactrouter.com/docs/en/v6/upgrading/v5#replace-useroutematch-with-usematch
+
+## 9.12 Movie Modal part Two
+
+이번에 할 것
+
+- 모달 사라지게 하기
+- 오버레이 만들기
+- Card위치 정렬
+  - 스크롤 위치
