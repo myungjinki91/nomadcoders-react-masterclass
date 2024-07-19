@@ -6754,3 +6754,9 @@ useMotionValueEvent(scrollY, "change", (latest) => {
   console.log(latest);
 });
 ```
+
+## 9.5 Home Screen part One
+
+이번에 할 것
+
+- React Query를 이용한 API 사용
