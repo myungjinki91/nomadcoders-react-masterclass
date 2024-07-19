@@ -6836,3 +6836,174 @@ function Home() {
 }
 export default Home;
 ```
+
+## 9.7 Slider part One
+
+이번에 할 것
+
+- 슬라이드 기초 만들기
+
+인상적인 내용
+
+- HTML, window.innerWidth
+- HTML, window.outerWidth
+- Motion, AnimatePresence
+
+코드
+
+```tsx
+import { useQuery } from "react-query";
+import styled from "styled-components";
+import { getMovies, IGetMoviesResult } from "../api";
+import { makeImagePath } from "../utils";
+import { AnimatePresence, motion, Variants } from "framer-motion";
+import { useState } from "react";
+
+const Wrapper = styled.div`
+  background: black;
+`;
+
+const Loader = styled.div`
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Banner = styled.div<{ bgPhoto: string }>`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${(
+      props
+    ) => props.bgPhoto});
+  background-size: cover;
+`;
+
+const Title = styled.h2`
+  font-size: 68px;
+  margin-bottom: 20px;
+`;
+
+const Overview = styled.p`
+  font-size: 30px;
+  width: 50%;
+`;
+
+const Slider = styled.div`
+  position: relative;
+  top: -100px;
+`;
+
+const Row = styled(motion.div)`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
+`;
+
+const Box = styled(motion.div)`
+  background-color: white;
+  height: 200px;
+  color: red;
+  font-size: 66px;
+`;
+
+const rowVariants: Variants = {
+  hidden: {
+    x: window.outerWidth + 10,
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: -window.outerWidth - 10,
+  },
+};
+
+function Home() {
+  const { data, isLoading } = useQuery<IGetMoviesResult>(
+    ["movies", "nowPlaying"],
+    getMovies
+  );
+  const [index, setIndex] = useState(0);
+  const increaseIndex = () => setIndex((prev) => prev + 1);
+  return (
+    <Wrapper>
+      {isLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Banner
+            onClick={increaseIndex}
+            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+          >
+            <Title>{data?.results[0].title}</Title>
+            <Overview>{data?.results[0].overview}</Overview>
+          </Banner>
+          <Slider>
+            <AnimatePresence>
+              <Row
+                variants={rowVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ type: "tween", duration: 1 }}
+                key={index}
+              >
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <Box key={i}>{i}</Box>
+                ))}
+              </Row>
+            </AnimatePresence>
+          </Slider>
+        </>
+      )}
+    </Wrapper>
+  );
+}
+export default Home;
+```
+
+팁
+
+혹시 Banner 클릭했을 때 일시적으로 X축 Scroll Bar가 등장하면서 오른쪽으로 창이 길어지는 현상이 발생하시는 분들은 참고하세요! (창 우측으로 검은색 공백이 생기는 경우에도 해결할 수 있습니다)
+
+Home.tsx에서
+
+```tsx
+const Wrapper = styled.div`
+  overflow-x: hidden;
+`;
+```
+
+넣어주면 모두 해결 됩니다!
+
+그리고 이 문제를 해결하는 도중에 추가적으로 깨달은 내용인데
+
+index.tsx 파일에서
+
+```tsx
+::-webkit-scrollbar {
+  display: none;
+}
+```
+
+이 코드를 추가하시면 Scroll Bar를 없앨 수 있습니다!
+
+(Scroll Bar가 없어져도 Scroll은 가능합니다)
+
+window.outerWidth : 브라우저 전체의 너비
+
+window.outerHeight : 브라우저 전체의 높이
+
+window.innerWidth : 브라우저 화면의 너비
+
+window.innerHeight : 브라우저 화면의 높이
+
+outerWidth vs innerWidth 비교 이미지
+
+https://www.cluemediator.com/how-to-get-the-window-size-in-javascript
