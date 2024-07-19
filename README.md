@@ -7367,3 +7367,13 @@ export default Home;
 팁
 
 backdrop_path가 존재하지 않는 이미지는 movie.backdrop_path || movie.poster_path로 처리해서 poster_path 이미지로 대체할 수 있습니다.
+
+## 9.10 Box Animations part Two
+
+이번에 할 것
+
+- Box hover에 title표시
+
+인상적인 내용
+
+- Box의 whileHover가 children에게 상속됨
