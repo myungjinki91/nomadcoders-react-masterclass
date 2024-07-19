@@ -7007,3 +7007,183 @@ window.innerHeight : 브라우저 화면의 높이
 outerWidth vs innerWidth 비교 이미지
 
 https://www.cluemediator.com/how-to-get-the-window-size-in-javascript
+
+## 9.8 Slider part Two
+
+이번에 할 것
+
+- 빠르게 누르면 생기는 버그 해결
+- 슬라이드에 사진 추가
+
+인상적인 내용
+
+- AnimatePresence, onExitComplete
+- AnimatePresence, initial
+
+코드
+
+```tsx
+import { useQuery } from "react-query";
+import styled from "styled-components";
+import { getMovies, IGetMoviesResult } from "../api";
+import { makeImagePath } from "../utils";
+import { AnimatePresence, motion, Variants } from "framer-motion";
+import { useEffect, useState } from "react";
+
+const Wrapper = styled.div`
+  background: black;
+  padding-bottom: 200px;
+`;
+
+const Loader = styled.div`
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Banner = styled.div<{ bgPhoto: string }>`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${(
+      props
+    ) => props.bgPhoto});
+  background-size: cover;
+`;
+
+const Title = styled.h2`
+  font-size: 68px;
+  margin-bottom: 20px;
+`;
+
+const Overview = styled.p`
+  font-size: 30px;
+  width: 50%;
+`;
+
+const Slider = styled.div`
+  position: relative;
+  top: -100px;
+`;
+
+const Row = styled(motion.div)`
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
+`;
+
+const Box = styled(motion.div)<{ bgPhoto: string }>`
+  background-color: white;
+  background-image: url(${(props) => props.bgPhoto});
+  background-size: cover;
+  background-position: center center;
+  height: 200px;
+  color: red;
+  font-size: 66px;
+`;
+
+const rowVariants: Variants = {
+  hidden: {
+    x: window.outerWidth + 5,
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: -window.outerWidth - 5,
+  },
+};
+
+const offset = 6;
+
+function Home() {
+  const { data, isLoading } = useQuery<IGetMoviesResult>(
+    ["movies", "nowPlaying"],
+    getMovies
+  );
+  const [index, setIndex] = useState(0);
+  const [leaving, setLeaving] = useState(false);
+  const increaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      const totalMovies = data.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  useEffect(() => console.log(index), [index]);
+  const toggleLeaving = () => setLeaving((prev) => !prev);
+  return (
+    <Wrapper>
+      {isLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Banner
+            onClick={increaseIndex}
+            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+          >
+            <Title>{data?.results[0].title}</Title>
+            <Overview>{data?.results[0].overview}</Overview>
+          </Banner>
+          <Slider>
+            <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+              <Row
+                variants={rowVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ type: "tween", duration: 1 }}
+                key={index}
+              >
+                {data?.results
+                  .slice(1)
+                  .slice(offset * index, offset * index + offset)
+                  .map((movie) => (
+                    <Box
+                      key={movie.id}
+                      bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                    />
+                  ))}
+              </Row>
+            </AnimatePresence>
+          </Slider>
+        </>
+      )}
+    </Wrapper>
+  );
+}
+export default Home;
+```
+
+팁
+
+AnimatePresence
+
+onExitComplete
+
+exit 중인 모든 노드들이 애니메이션을 끝내면 실행됩니다.
+
+ex) AnimatePresenceProps.onExitComplete?: (() => void) | undefined
+
+https://www.framer.com/docs/animate-presence/###onexitcomplete
+
+initial
+
+initial={false}를 전달하면 AnimatePresence는 컴포넌트가 처음 렌더링될 때 자식의 초기 애니메이션을 비활성화합니다.
+
+slice()
+
+slice() 메서드는 어떤 배열의 begin부터 end까지(end 미포함)에 대한 얕은 복사본을 새로운 배열 객체로 반환합니다. 원본 배열은 바뀌지 않습니다.
+
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
+
+다음 슬라이드로 넘어갈때 겹침 현상이 발생하는 이유.
+
+window.innerWidth는 처음 렌더링 할 때만 가로 길이를 받을 수 있음, 그렇기 때문에 새로고침 없이 화면 사이즈가 변경되면 브라우저의 사이즈가 변경되면 동적으로 브라우저의 가로 길이를 받을 수 없는것. 해결 방법은 다른 댓글처럼 resize를 위한 custom hook을 만들면 됨.
