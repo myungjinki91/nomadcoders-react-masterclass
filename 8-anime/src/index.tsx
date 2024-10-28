@@ -1,8 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { createGlobalStyle, css } from "styled-components";
 import { RecoilRoot } from "recoil";
-import { ThemeProvider, createGlobalStyle, css } from "styled-components";
-import { darkTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`${css`
   html,
@@ -143,8 +142,8 @@ const GlobalStyle = createGlobalStyle`${css`
   body {
     font-weight: 300;
     font-family: "Source Sans Pro", sans-serif;
-    color: ${(props) => props.theme.textColor};
     line-height: 1.2;
+    background-color: #222831;
   }
   a {
     text-decoration: none;
@@ -157,10 +156,10 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <RecoilRoot>
-    <ThemeProvider theme={darkTheme}>
+  <>
+    <RecoilRoot>
       <GlobalStyle />
       <App />
-    </ThemeProvider>
-  </RecoilRoot>
+    </RecoilRoot>
+  </>
 );
